@@ -62,7 +62,7 @@ export default {
     data() {
         return {
             email: "superadmin@mailinator.com",
-            password: "123123123",
+            password: "password",
             loading: false,
             isValid: false,
             passwordRules: [(v) => !!v || `Password is required`],
