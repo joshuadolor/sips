@@ -49,6 +49,8 @@ Route::group([
             'prefix' => 'resource',
         ], function () {
             Route::get('{resource}', 'ResourceController@index');
+            Route::post('{resource}', 'ResourceController@store');
+            Route::put('{resource}/{id}', 'ResourceController@update');
         });
 
     });

@@ -19,6 +19,7 @@ export default {
             items: [],
             service: ResourceService,
             resourceTerm: "",
+            toUpdate: {},
         };
     },
     methods: {
@@ -33,11 +34,14 @@ export default {
             this.$root.$emit("pageLoading", false);
         },
         showBooleanState(row, column) {
-            console.log(row);
             if (row[column]) {
                 return "yup activated";
             }
             return "not activated";
+        },
+        openUpdateModal(item) {
+            this.$refs.updateModal.open();
+            this.toUpdate = item;
         },
     },
     computed: {

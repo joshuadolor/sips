@@ -1,7 +1,7 @@
 <template>
-    <v-dialog v-model="dialog" width="450">
+    <v-dialog @input="modalToggle" v-model="dialog" width="450">
         <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark v-bind="attrs" v-on="on">
+            <v-btn v-bind="btnAttrs" dark v-on="on" v-show="!btnAttrs.hide">
                 {{ btnLabel }}
             </v-btn>
         </template>
@@ -10,7 +10,7 @@
                 {{ title }}
             </v-card-title>
             <v-card-text>
-                <slot></slot>
+                <slot :close="close"></slot>
             </v-card-text>
             <v-card-actions>
                 <slot name="actions"></slot>
@@ -25,14 +25,31 @@ export default {
     data() {
         return {
             dialog: false,
+            isModal: true,
         };
     },
     props: {
         btnLabel: {
-            default: "Create",
+            default: "<Button Label>",
         },
         title: {
-            default: "Create",
+            default: "<Custom Modal title>",
+        },
+        btnAttrs: {
+            default: () => ({
+                color: "primary",
+            }),
+        },
+    },
+    methods: {
+        close() {
+            this.dialog = false;
+        },
+        open() {
+            this.dialog = true;
+        },
+        modalToggle(value) {
+            this.$emit("modal-toggle", value);
         },
     },
 };

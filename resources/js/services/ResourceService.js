@@ -5,9 +5,28 @@ class ResourceService extends BaseService {
 
     static get(targetResource) {
         return this.client
-            .setUrl(this.endpoint)
             .setUrl(`${this.endpoint}/${targetResource}`)
             .get()
+            .then(({ data }) => data)
+            .catch((e) => {
+                throw this.createException(e);
+            });
+    }
+
+    static create(targetResource, request) {
+        return this.client
+            .setUrl(`${this.endpoint}/${targetResource}`)
+            .post(request)
+            .then(({ data }) => data)
+            .catch((e) => {
+                throw this.createException(e);
+            });
+    }
+
+    static update(targetResource, id, request) {
+        return this.client
+            .setUrl(`${this.endpoint}/${targetResource}/${id}`)
+            .put(request)
             .then(({ data }) => data)
             .catch((e) => {
                 throw this.createException(e);

@@ -1,6 +1,5 @@
 import Unauthorized from "~/exceptions/unauthorized";
-// import ValidationException from "~/Infrastructure/Exception/ValidationException";
-// import UnhandledException from "~/Infrastructure/Exception/UnhandledException";
+import Validation from "~/exceptions/validation";
 import BadRequest from "~/exceptions/bad-request";
 import UnhandledException from "~/exceptions/unhandled";
 
@@ -11,14 +10,14 @@ class ExceptionFactory {
 
         const errCode = response.status;
         const exceptionClsMapping = {
-            // 422: ValidationException,
+            422: Validation,
             401: Unauthorized,
             400: BadRequest,
         };
         const exception = exceptionClsMapping[errCode] || UnhandledException;
 
         exception.setAttributes({
-            messages: this.formMessages(data.message),
+            messages: data.errors || this.formMessages(data.message),
             data: response,
         });
         return exception;

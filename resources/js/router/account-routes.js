@@ -6,5 +6,8 @@ export const routes = [
             import(
                 /* webpackChunkName: "profile-page" */ "~/views/account/Profile.vue"
             ),
+        meta: {
+            appTitle: "Profile",
+        },
     },
 ];

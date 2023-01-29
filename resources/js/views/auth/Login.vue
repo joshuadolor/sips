@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height>
         <v-layout align-center justify-center class="elevation-3">
-            <v-flex xs12 sm8 md3>
+            <v-flex xs10 sm8 md3>
                 <div class="text-center mb-5">
                     <CompanyLogo />
                 </div>
@@ -87,7 +87,8 @@ export default {
                 const { token, user } = await AuthService.login(request);
                 this.$store.dispatch("session/setAccessToken", token);
                 this.$store.dispatch("session/setInfo", user);
-                this.$router.replace({ name: "applications" });
+
+                this.$router.replace({ name: "profile-page" });
             } catch (exception) {
                 const message = exception.getMessage() || "Invalid Credentials";
                 this.$root.$emit("showSnackbar", message, "red");

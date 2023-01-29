@@ -18,6 +18,7 @@ class Employee extends Model
         'last_name',
         'middle_name',
         'company_id',
+        'employee_code',
     ];
 
     protected $with = ['company'];

@@ -26,9 +26,7 @@ export default {
         };
     },
     methods: {
-        validate() {
-            this.dataForSubmission = true;
-        },
+        validate() {},
         getRules(value, givenRules = [], fieldName, serviceFieldName = null) {
             const errors = givenRules.map((gr) => {
                 if (!rules[gr]) throw `Rule: ${gr} - not implemented`;
@@ -86,13 +84,15 @@ export default {
 
         attemptSubmit() {
             const childForms = this.getAllChildForms();
-            this.dataForSubmission = true;
+            this.dataForSubmission = this.formValid;
 
+            this.validateForm();
             childForms.forEach((form) => {
                 form.validateForm();
                 if (!form.formValid) {
                     console.log("not valid", form.$options.name);
                 }
+                console.log("test");
                 this.dataForSubmission *= form.formValid;
             });
         },

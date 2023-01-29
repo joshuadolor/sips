@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height>
         <v-layout align-center justify-center>
-            <v-flex xs12 sm8 md3>
+            <v-flex xs10 sm8 md3>
                 <div class="text-center mb-5">
                     <CompanyLogo />
                 </div>

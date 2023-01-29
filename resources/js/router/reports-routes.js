@@ -4,5 +4,8 @@ export const routes = [
         name: "reports",
         component: () =>
             import(/* webpackChunkName: "reports" */ "~/views/reports"),
+        meta: {
+            appTitle: "Reports",
+        },
     },
 ];

@@ -1,13 +1,13 @@
-const isUndefined = function(test) {
-    return typeof test === 'undefined';
+const isUndefined = function (test) {
+    return typeof test === "undefined";
 };
 
 const isEmpty = (n) => {
-    return isUndefined(n) || n === '' || n === null || n === 0;
+    return isUndefined(n) || n === "" || n === null || n === 0;
 };
 
 function isObject(item) {
-    return item && typeof item === 'object' && !Array.isArray(item);
+    return item && typeof item === "object" && !Array.isArray(item);
 }
 
 const mergeDeep = (target, source) => {
@@ -31,11 +31,19 @@ const mergeDeep = (target, source) => {
 };
 
 const downloadFile = (path) => {
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     document.body.appendChild(a);
     a.href = path;
-    a.download = '';
+    a.download = "";
     a.click();
 };
 
-export { mergeDeep, isEmpty, downloadFile };
+const generateRandomString = (length = 8, prefix = "", affix = "") => {
+    const randomNum = Math.ceil(Math.random() * length * 1000);
+    const randomStr = (new Date().getTime() * randomNum)
+        .toString()
+        .substring(0, length);
+    return `${prefix}${randomStr}${affix}`;
+};
+
+export { mergeDeep, isEmpty, downloadFile, generateRandomString };

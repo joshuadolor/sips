@@ -12,6 +12,7 @@ const app = new Vue({
     store,
     render: (h) => h(App),
 });
+
 window.Store = store;
 window.App = app;
 app.$mount("#app");

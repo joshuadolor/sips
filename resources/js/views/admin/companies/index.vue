@@ -53,11 +53,11 @@
 
 <script>
 import ResourceListPage from "~/components/ResourceListPage";
-import CreateForm from "~/views/management/employees/CreateForm";
-import UpdateForm from "~/views/management/employees/UpdateForm";
+import CreateForm from "./CreateForm";
+import UpdateForm from "./UpdateForm";
 
 export default {
-    name: "EmployeesManagement",
+    name: "AgentsManagement",
     extends: ResourceListPage,
     components: {
         CreateForm,
@@ -67,36 +67,24 @@ export default {
         return {
             rawHeaders: [
                 {
-                    value: "employee_code",
-                    text: "Employee Code",
-                },
-                {
-                    value: "first_name",
-                    text: "First Name",
-                },
-                {
-                    value: "last_name",
-                    text: "Last Name",
-                },
-                {
-                    value: "middle_name",
-                    text: "Middle Name",
+                    value: "name",
+                    text: "Name",
                 },
             ],
-            resourceTerm: "employees",
+            resourceTerm: "companies",
             createModalAttrs: {
-                title: "Create Employee",
+                title: "Create Company",
                 btnLabel: "Create New",
             },
             updateModalAttrs: {
-                title: "Update Employee",
+                title: "Update Compant",
                 btnLabel: "Update",
                 btnAttrs: {
                     color: "amber darken-2",
                     hide: true,
                 },
             },
-            resourceName: "Employees",
+            resourceName: "Companies",
         };
     },
 };
