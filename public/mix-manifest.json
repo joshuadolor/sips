@@ -8,5 +8,6 @@
     "/js/admin.users.js": "/js/admin.users.js",
     "/js/admin.companies.js": "/js/admin.companies.js",
     "/js/notFound.js": "/js/notFound.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/payroll.js": "/js/payroll.js"
 }

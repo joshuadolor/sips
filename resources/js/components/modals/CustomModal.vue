@@ -1,5 +1,5 @@
 <template>
-    <v-dialog @input="modalToggle" v-model="dialog" width="450">
+    <v-dialog @input="modalToggle" v-model="dialog" :width="width">
         <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="btnAttrs" dark v-on="on" v-show="!btnAttrs.hide">
                 {{ btnLabel }}
@@ -39,6 +39,9 @@ export default {
             default: () => ({
                 color: "primary",
             }),
+        },
+        width: {
+            default: 450,
         },
     },
     methods: {

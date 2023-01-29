@@ -20,6 +20,13 @@ export default {
             service: ResourceService,
             resourceTerm: "",
             toUpdate: {},
+            additionalHeaders: [
+                {
+                    text: "Actions",
+                    value: "actions",
+                },
+            ],
+            search: "",
         };
     },
     methods: {
@@ -49,10 +56,7 @@ export default {
             return [
                 ...this.rawHeaders,
                 //import actions component to be used on subclass components
-                {
-                    text: "Actions",
-                    value: "actions",
-                },
+                ...this.additionalHeaders,
             ];
         },
     },

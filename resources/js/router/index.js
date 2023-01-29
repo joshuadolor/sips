@@ -9,6 +9,7 @@ import { routes as managementRoutes } from "./management-routes";
 import { routes as reportRoutes } from "./reports-routes";
 import { routes as adminRoutes } from "./admin-routes";
 import { routes as systemRoutes } from "./system-routes";
+import { routes as payrollRoutes } from "./payroll-routes";
 
 const routes = [
     ...publicRoutes,
@@ -17,6 +18,7 @@ const routes = [
     ...reportRoutes,
     ...adminRoutes,
     ...systemRoutes,
+    ...payrollRoutes,
 ];
 
 const router = new VueRouter({

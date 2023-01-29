@@ -1,5 +1,10 @@
 <template>
-    <v-form :disabled="isSubmitting" ref="form" v-model="formValid">
+    <v-form
+        @submit.prevent="submit"
+        :disabled="isSubmitting"
+        ref="form"
+        v-model="formValid"
+    >
         <v-text-field
             label="First Name*"
             v-model="first_name"
@@ -23,8 +28,8 @@
                     <v-btn
                         :loading="isSubmitting"
                         color="primary"
-                        @click="submit"
                         elevation="0"
+                        type="submit"
                         >Submit</v-btn
                     >
                 </v-col>

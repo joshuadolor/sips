@@ -6,6 +6,7 @@ use App\Http\Api\BaseController;
 use App\Models\Agent as AgentModel;
 use App\Models\Company as CompanyModel;
 use App\Models\Employee as EmployeeModel;
+use App\Models\Payroll as PayrollModel;
 use App\Models\Product as ProductModel;
 use App\Models\User as UserModel;
 use Illuminate\Support\Facades\Validator;
@@ -35,12 +36,14 @@ class ResourceController extends BaseController
                     'first_name' => 'required',
                     'last_name' => 'required',
                     'employee_code' => 'required|unique:employees,employee_code',
+                    'company_id' => 'required|exists:companies,id',
                 ],
                 'updateRules' => function ($id) {
                     return [
                         'first_name' => 'required',
                         'last_name' => 'required',
                         'employee_code' => "required|unique:employees,employee_code,$id",
+                        'company_id' => 'required|exists:companies,id',
                     ];
                 },
 
@@ -50,16 +53,30 @@ class ResourceController extends BaseController
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
+                    'company_id' => 'required|exists:companies,id',
                 ],
                 'updateRules' => function ($id) {
                     return [
                         'first_name' => 'required',
                         'last_name' => 'required',
+                        'company_id' => 'required|exists:companies,id',
                     ];
                 },
             ],
             'products' => [
                 'model' => ProductModel::class,
+            ],
+            'payroll' => [
+                'model' => PayrollModel::class,
+                'rules' => [
+                    'date_from' => 'required|date',
+                    'date_until' => 'required|date',
+                    'employee_code' => 'required|exists:employees,employee_code',
+                    'employee_name' => 'required',
+                    'hours' => 'required',
+                    'rate' => 'required',
+                    'company_id' => 'required|exists:companies,id',
+                ],
             ],
         ];
 

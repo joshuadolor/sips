@@ -33,7 +33,7 @@
 <script>
 import { getProfile } from "~/helpers/system";
 import Logo from "~/components/Logo";
-import { navMenu } from "~/config";
+import { navMenu } from "~/config/nav";
 import ListMenu from "./Menu";
 
 export default {

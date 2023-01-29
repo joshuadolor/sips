@@ -18,11 +18,16 @@
                             @close="close"
                         />
                     </CustomModal>
+                    <v-text-field
+                        prepend-inner-icon="mdi-magnify"
+                        v-model="search"
+                        placeholder="Search"
+                    ></v-text-field>
                 </v-col>
             </v-row>
         </v-container>
 
-        <v-data-table :items="items" :headers="headers">
+        <v-data-table :search="search" :items="items" :headers="headers">
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     small

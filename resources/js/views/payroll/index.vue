@@ -28,41 +28,20 @@
         </v-container>
 
         <v-data-table :items="items" :headers="headers">
-            <template v-slot:item.actions="{ item }">
-                <v-btn
-                    small
-                    elevation="0"
-                    color="amber darken-2"
-                    @click="openUpdateModal(item)"
-                    dark
-                    >Update</v-btn
-                >
+            <template v-slot:item.date="{ item }">
+                {{ item.date_from }} - {{ item.date_until }}
             </template>
         </v-data-table>
-        <CustomModal
-            ref="updateModal"
-            v-slot:default="{ close }"
-            v-bind="updateModalAttrs"
-        >
-            <UpdateForm
-                @success="
-                    close();
-                    fetchData();
-                "
-                :currentData="toUpdate"
-                @close="close"
-            />
-        </CustomModal>
     </div>
 </template>
 
 <script>
 import ResourceListPage from "~/components/ResourceListPage";
 import CreateForm from "./CreateForm";
-import UpdateForm from "./UpdateForm";
+import UpdateForm from "~/views/management/employees/UpdateForm";
 
 export default {
-    name: "AgentsManagement",
+    name: "EmployeesManagement",
     extends: ResourceListPage,
     components: {
         CreateForm,
@@ -72,32 +51,38 @@ export default {
         return {
             rawHeaders: [
                 {
-                    value: "first_name",
-                    text: "First Name",
+                    value: "employee_code",
+                    text: "Employee Code",
                 },
                 {
-                    value: "last_name",
-                    text: "Last Name",
+                    value: "date",
+                    text: "Payroll Date",
                 },
                 {
-                    value: "middle_name",
-                    text: "Middle Name",
+                    value: "employee.full_name",
+                    text: "Name",
+                },
+                {
+                    value: "total",
+                    text: "Total",
                 },
             ],
-            resourceTerm: "agents",
+            resourceTerm: "payroll",
             createModalAttrs: {
-                title: "Create Agent",
+                title: "Create Payroll",
                 btnLabel: "Create New",
+                width: 750,
             },
             updateModalAttrs: {
-                title: "Update Agent",
+                title: "Update Employee",
                 btnLabel: "Update",
                 btnAttrs: {
                     color: "amber darken-2",
                     hide: true,
                 },
             },
-            resourceName: "Agents",
+            additionalHeaders: [],
+            resourceName: "Payroll",
         };
     },
 };

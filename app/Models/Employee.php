@@ -22,10 +22,16 @@ class Employee extends Model
     ];
 
     protected $with = ['company'];
+    protected $appends = ['full_name'];
 
     public function company()
     {
         return $this->belongsTo('App\Models\Company', 'company_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "$this->last_name, $this->first_name $this->middle_name";
     }
 
 }
