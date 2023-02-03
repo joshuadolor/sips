@@ -18,9 +18,11 @@ class ResourceController extends BaseController
         $resourceMap = [
             'users' => [
                 'model' => UserModel::class,
+                'role' => 2,
             ],
             'companies' => [
                 'model' => CompanyModel::class,
+                'role' => 2,
                 'rules' => [
                     'name' => 'required|unique:companies,name',
                 ],
@@ -32,6 +34,7 @@ class ResourceController extends BaseController
             ],
             'employees' => [
                 'model' => EmployeeModel::class,
+                'role' => 1,
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
@@ -50,6 +53,7 @@ class ResourceController extends BaseController
             ],
             'agents' => [
                 'model' => AgentModel::class,
+                'role' => 1,
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
@@ -65,9 +69,11 @@ class ResourceController extends BaseController
             ],
             'products' => [
                 'model' => ProductModel::class,
+                'role' => 1,
             ],
             'payroll' => [
                 'model' => PayrollModel::class,
+                'role' => 0,
                 'rules' => [
                     'date_from' => 'required|date',
                     'date_until' => 'required|date',
@@ -82,11 +88,22 @@ class ResourceController extends BaseController
 
         return isset($resourceMap[$resource]) ? $resourceMap[$resource] : false;
     }
+
+    private function userCanProceed($role)
+    {
+        return auth()->user()->role >= $role;
+    }
+
     public function index($resource)
     {
         $config = $this->getConfig($resource);
         if (!$config) {
             return $this->sendError("Resource: $resource, not found", null, 400);
+        }
+
+        $isValidUser = $this->userCanProceed($config['role']);
+        if (!$isValidUser) {
+            return $this->sendError("Resource not available", null, 403);
         }
 
         $orm = $config['model'];
@@ -109,6 +126,11 @@ class ResourceController extends BaseController
         $config = $this->getConfig($resource);
         if (!$config) {
             return $this->sendError("Resource: $resource, not found", null, 400);
+        }
+
+        $isValidUser = $this->userCanProceed($config['role']);
+        if (!$isValidUser) {
+            return $this->sendError("Resource not available", null, 403);
         }
 
         $validator = Validator::make(request()->all(), $config['rules']);
@@ -134,6 +156,12 @@ class ResourceController extends BaseController
         if (!$config) {
             return $this->sendError("Resource: $resource, not found", null, 400);
         }
+
+        $isValidUser = $this->userCanProceed($config['role']);
+        if (!$isValidUser) {
+            return $this->sendError("Resource not available", null, 403);
+        }
+
         $validator = Validator::make(request()->all(), $config['updateRules']($id));
 
         if ($validator->fails()) {
