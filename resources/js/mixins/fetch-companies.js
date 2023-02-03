@@ -13,6 +13,7 @@ export default {
             this.companiesFetching = true;
             try {
                 this.companies = await Service.get("companies");
+                this.$emit("fetch-done");
             } catch (exception) {
                 const message =
                     exception.getMessage() || "Something went wrong";

@@ -94,6 +94,21 @@ class ResourceController extends BaseController
         return auth()->user()->role >= $role;
     }
 
+    private function query($orm, $method, $params = null)
+    {
+        $isSuperAdmin = auth()->user()->role === 2;
+
+        if ($isSuperAdmin) {
+            return $orm->{$method}($params);
+        }
+        $query = $orm::where('company_id', auth()->user()->company_id);
+        if (!$params) {
+            return $query->{$method}();
+        }
+
+        return $query->{$method}($params);
+    }
+
     public function index($resource)
     {
         $config = $this->getConfig($resource);
@@ -116,7 +131,7 @@ class ResourceController extends BaseController
         //  $orm->where()
         // }
 
-        $data = $orm::get();
+        $data = $this->query($orm, 'get');
 
         return $this->sendResponse($data);
     }
@@ -145,7 +160,8 @@ class ResourceController extends BaseController
         }
 
         $data = request()->all();
-        $data = $orm::create($data);
+
+        $data = $this->query($orm, 'create', $data);
 
         return $this->sendResponse($data);
     }

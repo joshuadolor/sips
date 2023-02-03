@@ -10,6 +10,11 @@
                     <div class="title">{{ name }}</div>
                     <div>{{ userInfo.email }}</div>
                 </div>
+                <CompanySelect
+                    v-if="isSuperAdmin"
+                    label="Viewing as"
+                    class="mt-10"
+                />
             </v-sheet>
 
             <v-divider></v-divider>
@@ -18,7 +23,7 @@
         </v-navigation-drawer>
         <v-app-bar app>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title>{{ titlePage }}</v-toolbar-title>
+            <v-toolbar-title>{{ titlePage }} </v-toolbar-title>
             <v-progress-linear
                 :active="loading"
                 :indeterminate="loading"
@@ -35,11 +40,14 @@ import { getProfile } from "~/helpers/system";
 import Logo from "~/components/Logo";
 import { navMenu } from "~/config/nav";
 import ListMenu from "./Menu";
+import CompanySelect from "~/components/widgets/CompanySelect";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
         Logo,
         ListMenu,
+        CompanySelect,
     },
     data() {
         return {
@@ -80,7 +88,9 @@ export default {
         titlePage() {
             return this.$route.meta?.appTitle;
         },
+        ...mapGetters("session", ["isSuperAdmin"]),
     },
+
     created() {
         getProfile();
     },

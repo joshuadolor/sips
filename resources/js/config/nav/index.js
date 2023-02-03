@@ -22,6 +22,14 @@ export const navMenu = [
         routeName: "payroll",
     },
     {
+        icon: "mdi-account-star",
+        routeName: "admin-pagex",
+        text: "Admin",
+        role: ["super-admin"],
+        submenu: [...adminLinks],
+    },
+
+    {
         icon: "mdi-format-list-bulleted-square",
         text: "Management",
         routeName: "management-pagex",
@@ -49,13 +57,6 @@ export const navMenu = [
         text: "Reports",
         routeName: "reports",
         role: ["admin"],
-    },
-    {
-        icon: "mdi-account-star",
-        routeName: "admin-pagex",
-        text: "Admin",
-        role: ["super-admin"],
-        submenu: [...adminLinks],
     },
     {
         icon: "mdi-logout",
