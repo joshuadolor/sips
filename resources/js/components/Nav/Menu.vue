@@ -1,7 +1,7 @@
 <template>
     <v-list>
         <v-list-group
-            v-for="item in items"
+            v-for="item in processedRoutes"
             :key="item.text"
             :no-action="hasSubmenu(item) || !item.routeName"
             :append-icon="hasSubmenu(item) ? 'mdi-chevron-down' : null"
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
     name: "NavMenu",
     props: ["items"],
@@ -67,8 +69,16 @@ export default {
         },
     },
     computed: {
+        ...mapGetters("session", ["roleName"]),
         routeName() {
             return this.$route.name;
+        },
+        processedRoutes() {
+            if (this.roleName === "super-admin") return this.items;
+            return this.items.filter((item) => {
+                if (!item?.role) return item;
+                return item.role.includes(this.roleName);
+            });
         },
     },
 };

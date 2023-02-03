@@ -2,6 +2,9 @@
     <v-dialog @input="modalToggle" v-model="dialog" :width="width">
         <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="btnAttrs" dark v-on="on" v-show="!btnAttrs.hide">
+                <v-icon v-if="btnAttrs.actualIcon">{{
+                    btnAttrs.actualIcon
+                }}</v-icon>
                 {{ btnLabel }}
             </v-btn>
         </template>
@@ -13,7 +16,7 @@
                 <slot :close="close"></slot>
             </v-card-text>
             <v-card-actions>
-                <slot name="actions"></slot>
+                <slot name="actions" :close="close"></slot>
             </v-card-actions>
         </v-card>
     </v-dialog>

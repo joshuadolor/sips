@@ -5,11 +5,27 @@ export const navMenu = [
         text: "Profile",
         routeName: "profile-page",
     },
+
+    {
+        icon: "mdi-tag-text",
+        text: "Sales Entry",
+        routeName: "sales",
+    },
+    {
+        icon: "mdi-text-box-edit",
+        text: "Inventory",
+        routeName: "inventory",
+    },
+    {
+        icon: "mdi-card-account-details",
+        text: "Payroll",
+        routeName: "payroll",
+    },
     {
         icon: "mdi-format-list-bulleted-square",
         text: "Management",
         routeName: "management-pagex",
-        permissions: ["admin"],
+        role: ["admin"],
         submenu: [
             {
                 icon: "mdi-account-hard-hat",
@@ -29,20 +45,16 @@ export const navMenu = [
         ],
     },
     {
-        icon: "mdi-card-account-details",
-        text: "Payroll",
-        routeName: "payroll",
-    },
-    {
         icon: "mdi-book-open",
         text: "Reports",
         routeName: "reports",
+        role: ["admin"],
     },
     {
         icon: "mdi-account-star",
         routeName: "admin-pagex",
         text: "Admin",
-        permissions: ["super-admin"],
+        role: ["super-admin"],
         submenu: [...adminLinks],
     },
     {
