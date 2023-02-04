@@ -60,13 +60,13 @@
                 <tbody>
                     <tr>
                         <td class="text-left">Deduction</td>
-                        <td class="text-right">{{ deduction }}</td>
+                        <td class="text-right">{{ currency(deduction) }}</td>
                     </tr>
                 </tbody>
                 <tfoot class="grey lighten-2">
                     <tr>
                         <th width="75%" class="text-right">Total Deductions</th>
-                        <th class="text-right">{{ deduction }}</th>
+                        <th class="text-right">{{ currency(deduction) }}</th>
                     </tr>
                 </tfoot>
             </table>
@@ -76,7 +76,7 @@
                     <tr>
                         <th width="75%" class="text-right">Net Pay</th>
                         <th class="font-weight-bold text-right text-body-1">
-                            {{ currency(item.total) }}
+                            {{ currency(netPay) }}
                         </th>
                     </tr>
                 </thead>
@@ -110,13 +110,16 @@ export default {
             return parseFloat(this.item.hours) * parseFloat(this.item.rate);
         },
         deduction() {
-            return currency(parseFloat(this.item.deduction));
+            return parseFloat(this.item.deduction);
         },
         dateFrom() {
             return format(new Date(this.item.date_from), "MMMM d, Y");
         },
         dateUntil() {
             return format(new Date(this.item.date_until), "MMMM d, Y");
+        },
+        netPay() {
+            return this.grossPay - this.deduction;
         },
         createdInfo() {
             const datetime = format(
