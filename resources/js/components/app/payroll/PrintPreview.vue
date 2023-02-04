@@ -1,8 +1,8 @@
 <template>
     <v-container>
         <v-row>
-            <v-col>
-                <Payslip />
+            <v-col id="payslip">
+                <Payslip :item="item" />
             </v-col>
         </v-row>
         <v-row>
@@ -16,7 +16,6 @@
 
 <script>
 import Payslip from "./Payslip.vue";
-import printJs from "print-js";
 
 export default {
     name: "PrintPreview",
@@ -25,10 +24,27 @@ export default {
     },
     methods: {
         print() {
-            printJs("printable", "html");
+            const printContents = document.getElementById("payslip");
+
+            const printable = document.createElement("div");
+            printable.innerHTML = printContents.innerHTML;
+            printable.id = "printable";
+
+            const app = document.querySelector("body");
+
+            app.append(printable);
+            window.print();
+            printable.remove();
         },
+    },
+    props: {
+        item: {},
     },
 };
 </script>
 
-<style></style>
+<style scoped>
+#payslip {
+    border: 1px solid #ccc;
+}
+</style>

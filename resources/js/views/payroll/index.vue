@@ -53,7 +53,7 @@
             ref="printPreviewModal"
             v-bind="printPayrollAttrs"
         >
-            <PrintPreview @close="close"></PrintPreview>
+            <PrintPreview :item="onPreview" @close="close"></PrintPreview>
         </CustomModal>
     </div>
 </template>
@@ -104,9 +104,9 @@ export default {
                 width: 750,
             },
             printPayrollAttrs: {
-                title: "Print Preview",
+                title: "",
                 btnLabel: "Print Preview",
-                width: 750,
+                width: 800,
                 btnAttrs: {
                     color: "amber darken-2",
                     hide: true,
