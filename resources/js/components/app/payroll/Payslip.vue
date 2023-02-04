@@ -19,7 +19,7 @@
 
             <div class="my-5 text-center">
                 <div class="text-caption">
-                    Payroll Period: February 1, 2023 - February 15, 2023
+                    Payroll Period: {{ dateFrom }} - {{ dateUntil }}
                 </div>
             </div>
 
@@ -82,7 +82,7 @@
                 </thead>
             </table>
             <div class="d-block text-center text-caption">
-                Created 02/03/2023 by Josh Dolor
+                {{ createdInfo }}
             </div>
         </v-card-text>
     </v-card>
@@ -90,16 +90,9 @@
 
 <script>
 import { currency } from "~/helpers";
+import { format } from "date-fns";
+
 export default {
-    data() {
-        return {
-            employeeName: "",
-            employeeId: "",
-            deductions: "",
-            netPay: "",
-            processedBy: "",
-        };
-    },
     methods: {
         currency,
     },
@@ -118,6 +111,23 @@ export default {
         },
         deduction() {
             return currency(parseFloat(this.item.deduction));
+        },
+        dateFrom() {
+            return format(new Date(this.item.date_from), "MMMM d, Y");
+        },
+        dateUntil() {
+            return format(new Date(this.item.date_until), "MMMM d, Y");
+        },
+        createdInfo() {
+            const datetime = format(
+                new Date(this.item.created_at),
+                "MMMM d, Y hh:mm:ss"
+            );
+            const { first_name, last_name, middle_name, email } =
+                this.item.created_by;
+            const creator = `${last_name}, ${first_name} ${middle_name} (${email})`;
+
+            return `Created ${datetime} by ${creator}`;
         },
     },
 };

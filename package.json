@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "date-fns": "^2.29.3",
         "print-js": "^1.6.0",
         "vue-router": "^3.6.5",
         "vuetify": "^2.6.14",
