@@ -12,14 +12,17 @@
                 </div>
                 <CompanySelect
                     v-if="isSuperAdmin"
-                    label="Viewing as"
+                    label="Creating/Updating as"
+                    :append-empty="true"
                     class="mt-10"
+                    @input="(v) => (superAdminCompanyId = v)"
+                    :value="superAdminCompanyId"
                 />
             </v-sheet>
 
             <v-divider></v-divider>
 
-            <ListMenu :items="links" />
+            <ListMenu :items="navMenu" />
         </v-navigation-drawer>
         <v-app-bar app>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
@@ -53,8 +56,8 @@ export default {
         return {
             drawer: null,
             showNav: false,
-            rawLinks: navMenu,
             loading: false,
+            navMenu,
         };
     },
     methods: {},
@@ -76,19 +79,22 @@ export default {
         name() {
             return `${this.userInfo.first_name} ${this.userInfo.middle_name} ${this.userInfo.last_name}`;
         },
-        links() {
-            const userRoles = this.userInfo.roles || [];
-            return this.rawLinks.filter((link) => {
-                return true;
-                return (link?.permitted || []).every((l) =>
-                    userRoles.includes(l)
-                );
-            });
-        },
+
         titlePage() {
             return this.$route.meta?.appTitle;
         },
         ...mapGetters("session", ["isSuperAdmin"]),
+
+        superAdminCompanyId: {
+            get() {
+                if (!this.isSuperAdmin) return {};
+
+                return this.$store.state.session.superAdminCompanyId;
+            },
+            set({ id }) {
+                this.$store.dispatch("session/setSuperAdminCompanyId", id);
+            },
+        },
     },
 
     created() {

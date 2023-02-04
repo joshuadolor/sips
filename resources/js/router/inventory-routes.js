@@ -3,7 +3,7 @@ export const routes = [
         path: "/sales-entry",
         name: "sales",
         component: () =>
-            import(/* webpackChunkName: "sales" */ "~/views/admin/companies"),
+            import(/* webpackChunkName: "sales" */ "~/views/sales"),
         meta: {
             appTitle: "Sales Entry",
         },
@@ -12,9 +12,7 @@ export const routes = [
         path: "/inventory",
         name: "inventory",
         component: () =>
-            import(
-                /* webpackChunkName: "inventory" */ "~/views/admin/Users.vue"
-            ),
+            import(/* webpackChunkName: "inventory" */ "~/views/inventory"),
         meta: {
             appTitle: "Inventory",
         },

@@ -1,0 +1,18 @@
+<script>
+import CreateForm from "./CreateForm";
+import UpdateFormMixin from "~/mixins/update-form";
+
+export default {
+    name: "UpdateProductForm",
+    extends: CreateForm,
+    mixins: [UpdateFormMixin],
+    data() {
+        return {
+            dataExceptions: ["company_id"],
+            serviceMethod: "update",
+            successMessage: "Updated",
+            serviceParams: ["resourceTerm", "resourceId", "requestData"],
+        };
+    },
+};
+</script>

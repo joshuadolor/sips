@@ -10,4 +10,8 @@ export default {
     setInfo(state, data) {
         state.info = data;
     },
+
+    setSuperAdminCompanyId(state, data) {
+        state.superAdminCompanyId = data;
+    },
 };

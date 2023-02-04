@@ -45,5 +45,10 @@ const generateRandomString = (length = 8, prefix = "", affix = "") => {
         .substring(0, length);
     return `${prefix}${randomStr}${affix}`;
 };
+const currency = (num = 0, currency = "", decimalPlaces = 2) => {
+    return `${currency} ${parseFloat(num)
+        .toFixed(decimalPlaces)
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}`;
+};
 
-export { mergeDeep, isEmpty, downloadFile, generateRandomString };
+export { mergeDeep, isEmpty, downloadFile, generateRandomString, currency };

@@ -13,9 +13,46 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Company::factory(5)->create();
-        \App\Models\User::factory(8)->create();
-        \App\Models\Agent::factory(10)->create();
-        \App\Models\Employee::factory(10)->create();
+        \App\Models\Company::factory(15)->create();
+        \App\Models\User::create([
+            'first_name' => "Sips",
+            'last_name' => "Admin",
+            'middle_name' => "Super",
+            'email' => "superAdminUser@sips.com",
+            'email_verified_at' => now(),
+            'is_active' => 1,
+            'role' => 2,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
+        $companyIdTest = 2;
+        \App\Models\User::create([
+            'first_name' => "Sips",
+            'last_name' => "Admin",
+            'middle_name' => "Super",
+            'email' => "adminUser@sips.com",
+            'email_verified_at' => now(),
+            'is_active' => 1,
+            'role' => 1,
+            'company_id' => $companyIdTest,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
+        \App\Models\User::create([
+            'first_name' => "Sips",
+            'last_name' => "Admin",
+            'middle_name' => "Super",
+            'email' => "normalUser@sips.com",
+            'email_verified_at' => now(),
+            'is_active' => 1,
+            'role' => 0,
+            'company_id' => $companyIdTest,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
+        \App\Models\User::factory(20)->create();
+        \App\Models\Agent::factory(20)->create();
+        \App\Models\Employee::factory(20)->create();
+        \App\Models\Product::factory(17)->create();
     }
 }

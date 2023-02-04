@@ -5,11 +5,11 @@
     "/js/management.products.js": "/js/management.products.js",
     "/js/management.agents.js": "/js/management.agents.js",
     "/js/reports.js": "/js/reports.js",
-    "/js/admin.users.js": "/js/admin.users.js",
-    "/js/admin.companies.js": "/js/admin.companies.js",
+    "/js/sales.js": "/js/sales.js",
     "/js/notFound.js": "/js/notFound.js",
     "/js/payroll.js": "/js/payroll.js",
     "/css/app.css": "/css/app.css",
-    "/js/inventory.js": "/js/inventory.js",
-    "/js/sales.js": "/js/sales.js"
+    "/js/admin.users.js": "/js/admin.users.js",
+    "/js/admin.companies.js": "/js/admin.companies.js",
+    "/js/inventory.js": "/js/inventory.js"
 }

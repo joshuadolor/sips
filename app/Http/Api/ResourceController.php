@@ -18,11 +18,14 @@ class ResourceController extends BaseController
         $resourceMap = [
             'users' => [
                 'model' => UserModel::class,
-                'role' => 2,
+                'role' => ['get' => 2, 'create' => 2, 'update' => 2],
+                'updateRules' => function ($id) {
+                    return [];
+                },
             ],
             'companies' => [
                 'model' => CompanyModel::class,
-                'role' => 2,
+                'role' => ['get' => 2, 'create' => 2, 'update' => 2],
                 'rules' => [
                     'name' => 'required|unique:companies,name',
                 ],
@@ -34,46 +37,56 @@ class ResourceController extends BaseController
             ],
             'employees' => [
                 'model' => EmployeeModel::class,
-                'role' => 1,
+                'role' => ['get' => 0, 'create' => 1, 'update' => 1],
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
                     'employee_code' => 'required|unique:employees,employee_code',
-                    'company_id' => 'required|exists:companies,id',
                 ],
                 'updateRules' => function ($id) {
                     return [
                         'first_name' => 'required',
                         'last_name' => 'required',
                         'employee_code' => "required|unique:employees,employee_code,$id",
-                        'company_id' => 'required|exists:companies,id',
                     ];
                 },
 
             ],
             'agents' => [
                 'model' => AgentModel::class,
-                'role' => 1,
+                'role' => ['get' => 0, 'create' => 1, 'update' => 1],
+
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
-                    'company_id' => 'required|exists:companies,id',
                 ],
+
                 'updateRules' => function ($id) {
                     return [
                         'first_name' => 'required',
                         'last_name' => 'required',
-                        'company_id' => 'required|exists:companies,id',
                     ];
                 },
             ],
             'products' => [
                 'model' => ProductModel::class,
-                'role' => 1,
+                'role' => ['get' => 0, 'create' => 1, 'update' => 1],
+                'rules' => [
+                    'name' => "required|unique:products,name",
+                    'price' => 'required|numeric|min:0|not_in:0',
+                    'item_code' => 'required|unique:products,item_code',
+                ],
+                'updateRules' => function ($id) {
+                    return [
+                        'name' => "required|unique:products,name,$id",
+                        'price' => 'required|numeric|min:0|not_in:0',
+                        'item_code' => "required|unique:products,item_code,$id",
+                    ];
+                },
             ],
             'payroll' => [
                 'model' => PayrollModel::class,
-                'role' => 0,
+                'role' => ['get' => 0, 'create' => 0, 'update' => 1],
                 'rules' => [
                     'date_from' => 'required|date',
                     'date_until' => 'required|date',
@@ -81,7 +94,6 @@ class ResourceController extends BaseController
                     'employee_name' => 'required',
                     'hours' => 'required',
                     'rate' => 'required',
-                    'company_id' => 'required|exists:companies,id',
                 ],
             ],
         ];
@@ -89,24 +101,23 @@ class ResourceController extends BaseController
         return isset($resourceMap[$resource]) ? $resourceMap[$resource] : false;
     }
 
-    private function userCanProceed($role)
+    private function userCanProceed($config, $method)
     {
+        $role = $config['role'][$method];
         return auth()->user()->role >= $role;
     }
 
-    private function query($orm, $method, $params = null)
+    private function query($orm)
     {
         $isSuperAdmin = auth()->user()->role === 2;
 
         if ($isSuperAdmin) {
-            return $orm->{$method}($params);
-        }
-        $query = $orm::where('company_id', auth()->user()->company_id);
-        if (!$params) {
-            return $query->{$method}();
+            return $orm::orderBy('created_at', 'desc');
         }
 
-        return $query->{$method}($params);
+        $query = $orm::where('company_id', auth()->user()->company_id);
+
+        return $query;
     }
 
     public function index($resource)
@@ -116,7 +127,7 @@ class ResourceController extends BaseController
             return $this->sendError("Resource: $resource, not found", null, 400);
         }
 
-        $isValidUser = $this->userCanProceed($config['role']);
+        $isValidUser = $this->userCanProceed($config, 'get');
         if (!$isValidUser) {
             return $this->sendError("Resource not available", null, 403);
         }
@@ -131,9 +142,39 @@ class ResourceController extends BaseController
         //  $orm->where()
         // }
 
-        $data = $this->query($orm, 'get');
+        $data = $this->query($orm)->get();
 
         return $this->sendResponse($data);
+    }
+
+    private function modelData($orm, $data, $isUpdate = false)
+    {
+        $user = auth()->user();
+        $isSuperAdmin = $user->role === 2;
+
+        $model = new $orm();
+        $fillables = $model->getFillable();
+
+        if (in_array('created_by', $fillables) && !$isUpdate) {
+            $data['created_by'] = $user->id;
+        }
+
+        if (in_array('updated_by', $fillables)) {
+            $data['updated_by'] = $user->id;
+        }
+
+        if (in_array('user_id', $fillables) && !$isUpdate) {
+            $data['user_id'] = $user->id;
+        }
+
+        if (in_array('company_id', $fillables)) {
+            if (!$isSuperAdmin) {
+                $data['company_id'] = auth()->user()->company_id;
+            }
+
+        }
+
+        return $data;
     }
 
     public function store($resource)
@@ -143,7 +184,7 @@ class ResourceController extends BaseController
             return $this->sendError("Resource: $resource, not found", null, 400);
         }
 
-        $isValidUser = $this->userCanProceed($config['role']);
+        $isValidUser = $this->userCanProceed($config, 'create');
         if (!$isValidUser) {
             return $this->sendError("Resource not available", null, 403);
         }
@@ -161,7 +202,10 @@ class ResourceController extends BaseController
 
         $data = request()->all();
 
-        $data = $this->query($orm, 'create', $data);
+        //override company
+        $data = $this->modelData($orm, $data);
+
+        $data = $this->query($orm)->create($data);
 
         return $this->sendResponse($data);
     }
@@ -173,7 +217,7 @@ class ResourceController extends BaseController
             return $this->sendError("Resource: $resource, not found", null, 400);
         }
 
-        $isValidUser = $this->userCanProceed($config['role']);
+        $isValidUser = $this->userCanProceed($config, 'update');
         if (!$isValidUser) {
             return $this->sendError("Resource not available", null, 403);
         }
@@ -190,7 +234,12 @@ class ResourceController extends BaseController
         }
 
         $data = request()->all();
-        $data = $orm::find($id)->update($data);
+        //override company
+        $data = $this->modelData($orm, $data, true);
+
+        $data = $this->query($orm)
+            ->find($id)
+            ->update($data);
 
         return $this->sendResponse($data);
     }

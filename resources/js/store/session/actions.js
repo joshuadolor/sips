@@ -7,4 +7,7 @@ export default {
     setInfo({ commit }, data) {
         commit("setInfo", data);
     },
+    setSuperAdminCompanyId({ commit }, data) {
+        commit("setSuperAdminCompanyId", data);
+    },
 };

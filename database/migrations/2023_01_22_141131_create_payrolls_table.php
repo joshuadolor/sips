@@ -25,8 +25,12 @@ class CreatePayrollsTable extends Migration
             $table->string('employee_code');
             $table->string('employee_name');
 
+            $table->bigInteger('user_id')->unsigned()->comment('the one who created this payroll');
+
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('employee_id')->unsigned();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

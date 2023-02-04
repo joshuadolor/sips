@@ -111,7 +111,9 @@
                     sm="12"
                     md="6"
                 >
-                    Days: {{ days }}
+                    <div>Days: {{ days }}</div>
+                    <div>Rate: {{ rate }}</div>
+                    <div>Hours: {{ hours }}</div>
                 </v-col>
                 <v-col
                     class="text-right font-weight-bold"
@@ -120,12 +122,18 @@
                     sm="12"
                     md="6"
                 >
-                    <div>Subtotal: {{ subTotal }}</div>
-                    <div v-if="deduction">({{ deduction }})</div>
-                    <div class="text-h6">Total Salary: {{ total }}</div>
+                    <div class="text-h6">
+                        Subtotal: {{ currency(subTotal) }}
+                    </div>
+                    <div v-if="deduction" class="text-h6">
+                        Deductions: ({{ currency(deduction) }})
+                    </div>
+                    <div class="text-h5">
+                        Total Salary: {{ currency(total, "₱") }}
+                    </div>
                 </v-col>
             </v-row>
-
+            <v-divider />
             <v-container class="mt-3">
                 <v-row>
                     <v-col class="text-right">
@@ -151,6 +159,7 @@
 
 <script>
 import BaseCreateFrom from "~/components/forms/BaseCreateForm";
+import { currency } from "~/helpers";
 
 const formData = {
     date_from: "",
@@ -193,6 +202,7 @@ export default {
         };
     },
     methods: {
+        currency,
         minimumZero(field) {
             if (this[field] === "") {
                 this[field] = 0;
@@ -231,6 +241,12 @@ export default {
         },
         total() {
             return this.subTotal - this.deduction;
+        },
+        company_id() {
+            if (this.isSuperAdmin) {
+                return this.$store.state.session.superAdminCompanyId;
+            }
+            return this.$store.state.session.info.company_id;
         },
     },
 };

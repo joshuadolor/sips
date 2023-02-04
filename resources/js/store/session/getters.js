@@ -4,7 +4,7 @@ export default {
         const role = state.info.role;
         return roleMap[role] ?? roleMap[0];
     },
-    companyId() {
+    companyId(state) {
         return state.info?.company_id;
     },
 

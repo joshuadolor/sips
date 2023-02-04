@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,8 @@ class Employee extends Model
         'middle_name',
         'company_id',
         'employee_code',
+        'created_by',
+        'updated_by',
     ];
 
     protected $with = ['company'];
@@ -31,7 +34,22 @@ class Employee extends Model
 
     public function getFullNameAttribute()
     {
-        return "$this->last_name, $this->first_name $this->middle_name";
+        return ucwords("$this->last_name, $this->first_name $this->middle_name");
+    }
+
+    public function getFirstNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    public function getLastNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    public function getMiddleNameAttribute($value)
+    {
+        return ucwords($value);
     }
 
 }

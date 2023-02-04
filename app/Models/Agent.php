@@ -19,6 +19,8 @@ class Agent extends Model
         'middle_name',
         'email',
         'company_id',
+        'created_by',
+        'updated_by',
     ];
 
     protected $with = ['company'];
@@ -26,6 +28,21 @@ class Agent extends Model
     public function company()
     {
         return $this->belongsTo('App\Models\Company', 'company_id');
+    }
+
+    public function getFirstNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    public function getLastNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    public function getMiddleNameAttribute($value)
+    {
+        return ucwords($value);
     }
 
 }

@@ -2,40 +2,40 @@
     <v-autocomplete
         item-text="name"
         item-value="id"
-        :items="companies"
+        :items="processedCompanies"
         :label="label"
-        v-model="company"
+        v-model="internalValue"
         :loading="companiesFetching"
-        v-if="isSuperAdmin"
+        return-object
     >
     </v-autocomplete>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import CustomComponent from "~/mixins/custom-component";
 import FetchCompanies from "~/mixins/fetch-companies";
 
 export default {
     name: "CompanySelect",
     mixins: [CustomComponent, FetchCompanies],
-    data() {
-        return {
-            company: "",
-        };
-    },
+
     computed: {
-        ...mapGetters("session", ["isSuperAdmin"]),
+        processedCompanies() {
+            return this.companies;
+        },
     },
     props: {
         label: {
             default: "Company",
         },
+        appendEmpty: {
+            default: false,
+        },
     },
     mounted() {
         this.$on("fetch-done", () => {
             if (this.companies.length > 0) {
-                this.company = this.companies[0];
+                this.internalValue = this.companies[0];
             }
         });
     },

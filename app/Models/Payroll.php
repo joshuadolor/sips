@@ -10,6 +10,7 @@ class Payroll extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'employee_id',
         'employee_code',
         'employee_name',
@@ -23,11 +24,16 @@ class Payroll extends Model
 
     protected $appends = ['total'];
 
-    protected $with = ['employee'];
+    protected $with = ['employee', 'createdBy'];
 
     public function employee()
     {
         return $this->belongsTo('App\Models\Employee', 'employee_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     public function getTotalAttribute()

@@ -67,6 +67,10 @@ export default {
         return {
             rawHeaders: [
                 {
+                    value: "created_at",
+                    text: "Created At",
+                },
+                {
                     value: "name",
                     text: "Name",
                 },

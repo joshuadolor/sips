@@ -22,7 +22,9 @@ export default {
                     if (!this.dataExceptions.includes(key)) {
                         this[key] = this.formData[key];
                     }
-                } catch (e) {}
+                } catch (e) {
+                    console.log(e);
+                }
             });
         },
     },

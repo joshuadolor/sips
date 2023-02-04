@@ -61,7 +61,7 @@ export default {
     },
     data() {
         return {
-            email: "superadmin@mailinator.com",
+            email: "superAdminUser@sips.com",
             password: "password",
             loading: false,
             isValid: false,

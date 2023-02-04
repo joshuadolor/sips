@@ -1,3 +1,4 @@
+import { mapGetters } from "vuex";
 import FormComponent from "~/mixins/form-component";
 import Service from "~/services/ResourceService";
 
@@ -45,6 +46,7 @@ export default {
                 this.resetForm();
                 this.resetValidation();
             } catch (exception) {
+                console.log(exception);
                 const message = exception.getMessages();
                 this.apiErrors = message;
             }
@@ -73,6 +75,7 @@ export default {
         },
     },
     computed: {
+        ...mapGetters("session", ["isSuperAdmin", "companyId"]),
         requestData() {
             let data = {};
             this.formKeys.forEach((key) => {
@@ -84,7 +87,10 @@ export default {
             return data;
         },
         company_id() {
-            return this.$store.state.session.info?.company_id;
+            if (this.isSuperAdmin) {
+                return this.$store.state.session.superAdminCompanyId;
+            }
+            return this.companyId;
         },
     },
     mounted() {

@@ -15,10 +15,12 @@ class Product extends Model
      */
     protected $fillable = [
         'name',
-        'product_code',
+        'item_code',
         'quantity',
         'price',
         'company_id',
+        'created_by',
+        'updated_by',
     ];
 
     protected $with = ['company'];
@@ -26,6 +28,11 @@ class Product extends Model
     public function company()
     {
         return $this->belongsTo('App\Models\Company', 'company_id');
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
     }
 
 }

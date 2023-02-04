@@ -3,9 +3,7 @@ export const routes = [
         path: "/admin/users",
         name: "admin.users",
         component: () =>
-            import(
-                /* webpackChunkName: "admin.users" */ "~/views/admin/Users.vue"
-            ),
+            import(/* webpackChunkName: "admin.users" */ "~/views/admin/users"),
         meta: {
             appTitle: "App Users",
         },

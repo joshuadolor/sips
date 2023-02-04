@@ -42,6 +42,10 @@
                     <v-icon class="mr-2">mdi-printer</v-icon> Print Preview
                 </v-btn>
             </template>
+
+            <template v-slot:item.total="{ item }">
+                {{ currency(item.total) }}
+            </template>
         </v-data-table>
 
         <CustomModal
@@ -59,6 +63,7 @@ import ResourceListPage from "~/components/ResourceListPage";
 import CreateForm from "./CreateForm";
 import UpdateForm from "~/views/management/employees/UpdateForm";
 import PrintPreview from "~/components/app/payroll/PrintPreview";
+import { currency } from "~/helpers";
 
 export default {
     name: "EmployeesManagement",
@@ -85,7 +90,7 @@ export default {
                 },
                 {
                     value: "total",
-                    text: "Total",
+                    text: "Total Salary",
                 },
                 {
                     value: "actions",
@@ -114,6 +119,7 @@ export default {
         };
     },
     methods: {
+        currency,
         openPrintPreview(item) {
             this.onPreview = item;
             this.$refs.printPreviewModal.open();

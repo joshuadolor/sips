@@ -20,6 +20,11 @@ class CreateAgentsTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('email')->nullable()->unique();
             $table->bigInteger('company_id')->unsigned();
+            $table->bigInteger('created_by')->nullable()->unsigned();
+            $table->bigInteger('updated_by')->nullable()->unsigned();
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
