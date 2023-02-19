@@ -53,5 +53,12 @@ Route::group([
             Route::put('{resource}/{id}', 'ResourceController@update');
         });
 
+        Route::group([
+            'prefix' => 'product-movements',
+        ], function () {
+            Route::get('/', 'ProductMovementController@index');
+            Route::post('/', 'ProductMovementController@store');
+        });
+
     });
 });

@@ -18,4 +18,14 @@ export default class BaseService {
                 throw this.createException(e);
             });
     }
+
+    static create(request) {
+        return this.client
+            .setUrl(`${this.endpoint}`)
+            .post(request)
+            .then(({ data }) => data)
+            .catch((e) => {
+                throw this.createException(e);
+            });
+    }
 }

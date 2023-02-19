@@ -22,6 +22,7 @@ class Agent extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['full_name'];
 
     protected $with = ['company'];
 
@@ -43,6 +44,11 @@ class Agent extends Model
     public function getMiddleNameAttribute($value)
     {
         return ucwords($value);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return ucwords("$this->last_name, $this->first_name $this->middle_name");
     }
 
 }
