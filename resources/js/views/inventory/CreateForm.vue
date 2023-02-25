@@ -9,23 +9,31 @@
             :loading="productsFetching"
             label="Item Code"
             :items="products"
-            v-model="product_id"
+            v-model="selectedProducts"
             item-value="id"
             item-text="item_code"
-            :rules="
-                getRules(product_id, ['required'], 'Item Code', 'product_id')
-            "
+            multiple
+            :rules="[
+                (v) =>
+                    selectedProducts.length > 0 ||
+                    'Item selected should be atleast one',
+            ]"
+            return-object
         ></v-autocomplete>
         <v-autocomplete
             :loading="productsFetching"
             :items="products"
             item-value="id"
             item-text="name"
-            v-model="product_id"
+            v-model="selectedProducts"
             label="Product Name"
-            :rules="
-                getRules(product_id, ['required'], 'Product Name', 'product_id')
-            "
+            multiple
+            :rules="[
+                (v) =>
+                    selectedProducts.length > 0 ||
+                    'Product selected should be atleast one',
+            ]"
+            return-object
         ></v-autocomplete>
         <v-switch
             true-value="receive"
@@ -55,9 +63,28 @@
             ]"
         ></v-text-field>
 
-        <div class="font-weight-bold" v-if="selectedProduct">
-            Cost: {{ currency(cost) }}
-        </div>
+        <v-simple-table v-if="selectedProducts.length > 0">
+            <template v-slot:default>
+                <thead>
+                    <tr>
+                        <th class="text-left">Name</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right">Price</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in selectedProducts" :key="item.id">
+                        <td>{{ item.name }}</td>
+                        <td class="text-center">{{ quantity }}</td>
+                        <td class="text-right">{{ currency(item.price) }}</td>
+                        <td class="text-right">
+                            {{ currency(quantity * item.price) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </template>
+        </v-simple-table>
 
         <v-container class="mt-3">
             <v-row>
@@ -104,19 +131,9 @@ export default {
             resourceTerm: "products",
             dataExceptions: ["company_id"],
             service: Service,
-        };
-    },
-    computed: {
-        selectedProduct() {
-            return this.products.find(
-                (product) => product.id === this.product_id
-            );
-        },
-        cost() {
-            if (!this.selectedProduct) return 0;
 
-            return this.selectedProduct.price * this.quantity;
-        },
+            selectedProducts: [],
+        };
     },
     methods: {
         currency,
@@ -126,13 +143,22 @@ export default {
                 return;
             }
 
-            const request = {
-                ...this.formKeys.reduce((a, b) => ({ ...a, [b]: this[b] }), {}),
-                cost: this.cost,
-            };
             this.isSubmitting = true;
+
             try {
-                const data = await Service.create(request);
+                const data = await Promise.all(
+                    this.selectedProducts.map(async (product) => {
+                        const req = {
+                            type: this.type,
+                            quantity: this.quantity,
+                            agent_id: this.agent_id,
+                            product_id: product.id,
+                            cost: this.quantity * parseFloat(product.price),
+                        };
+                        return await Service.create(req);
+                    })
+                );
+
                 this.$root.$emit("showSnackbar", this.successMessage);
                 this.$emit("success", data);
             } catch (exception) {
@@ -140,6 +166,7 @@ export default {
                 const message = exception.getMessages();
                 this.apiErrors = message;
             }
+
             this.isSubmitting = false;
         },
     },
