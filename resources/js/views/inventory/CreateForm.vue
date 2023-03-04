@@ -8,7 +8,7 @@
         <v-autocomplete
             :loading="productsFetching"
             label="Item Code"
-            :items="products"
+            :items="processedProducts"
             v-model="selectedProducts"
             item-value="id"
             item-text="item_code"
@@ -22,7 +22,7 @@
         ></v-autocomplete>
         <v-autocomplete
             :loading="productsFetching"
-            :items="products"
+            :items="processedProducts"
             item-value="id"
             item-text="name"
             v-model="selectedProducts"
@@ -53,33 +53,60 @@
             :rules="getRules(agent_id, ['required'], 'Agent', 'agent_id')"
         ></v-autocomplete>
 
-        <v-text-field
-            label="Quantity"
-            v-model="quantity"
-            type="number"
-            :rules="[
-                ...getRules(quantity, ['required'], 'Quantity', 'quantity'),
-                (v) => v > 0 || 'Quantity must be greater than 0',
-            ]"
-        ></v-text-field>
-
-        <v-simple-table v-if="selectedProducts.length > 0">
+        <v-simple-table fixed-header v-if="selectedProducts.length > 0">
             <template v-slot:default>
                 <thead>
                     <tr>
                         <th class="text-left">Name</th>
-                        <th class="text-center">Quantity</th>
+                        <th class="text-center">
+                            <v-checkbox v-model="sameQuantities" dense>
+                                <template v-slot:label>
+                                    <small v-if="!sameQuantities"
+                                        >Quantity</small
+                                    >
+                                </template>
+                            </v-checkbox>
+                            <v-text-field
+                                v-if="sameQuantities"
+                                label="Quantity"
+                                dense
+                                v-model="lastQuantityValue"
+                            >
+                            </v-text-field>
+                        </th>
                         <th class="text-right">Price</th>
                         <th class="text-right">Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in selectedProducts" :key="item.id">
+                    <tr v-for="(item, idx) in selectedProducts" :key="item.id">
                         <td>{{ item.name }}</td>
-                        <td class="text-center">{{ quantity }}</td>
+                        <td class="text-center">
+                            <v-text-field
+                                type="number"
+                                min="1"
+                                v-model="item.toProcessQuantity"
+                                :max="item.quantity"
+                                hide-details="auto"
+                                label="Quantity"
+                                :disabled="sameQuantities"
+                                @input="
+                                    updateQuantity(
+                                        item.toProcessQuantity,
+                                        item.id
+                                    )
+                                "
+                            />
+                        </td>
+
                         <td class="text-right">{{ currency(item.price) }}</td>
                         <td class="text-right">
-                            {{ currency(quantity * item.price) }}
+                            {{
+                                currency(
+                                    parseInt(item.toProcessQuantity) *
+                                        parseFloat(item.price)
+                                )
+                            }}
                         </td>
                     </tr>
                 </tbody>
@@ -133,6 +160,8 @@ export default {
             service: Service,
 
             selectedProducts: [],
+            lastQuantityValue: 0,
+            sameQuantities: false,
         };
     },
     methods: {
@@ -150,10 +179,12 @@ export default {
                     this.selectedProducts.map(async (product) => {
                         const req = {
                             type: this.type,
-                            quantity: this.quantity,
+                            quantity: product.toProcessQuantity,
                             agent_id: this.agent_id,
                             product_id: product.id,
-                            cost: this.quantity * parseFloat(product.price),
+                            cost:
+                                parseInt(product.toProcessQuantity) *
+                                parseFloat(product.price),
                         };
                         return await Service.create(req);
                     })
@@ -168,6 +199,37 @@ export default {
             }
 
             this.isSubmitting = false;
+        },
+        updateQuantity(v, id) {
+            this.selectedProducts = this.selectedProducts.map((prod) => {
+                if (prod.id === id) {
+                    prod.toProcessQuantity = parseInt(v);
+                }
+                return prod;
+            });
+        },
+    },
+    watch: {
+        lastQuantityValue(val) {
+            this.selectedProducts.forEach((product) => {
+                product.toProcessQuantity = val;
+            });
+        },
+        sameQuantities(val) {
+            if (val) {
+                this.selectedProducts.forEach((product) => {
+                    product.toProcessQuantity = this.lastQuantityValue;
+                });
+            }
+        },
+    },
+    computed: {
+        processedProducts() {
+            return this.products.map((product) => {
+                product.test = "";
+                product.toProcessQuantity = this.lastQuantityValue;
+                return product;
+            });
         },
     },
 };
