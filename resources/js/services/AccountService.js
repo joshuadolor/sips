@@ -12,6 +12,16 @@ class AccountsService extends BaseService {
                 throw this.createException(e);
             });
     }
+
+    static resetPassword(request) {
+        return this.client
+            .setUrl(`${this.endpoint}/reset-password`)
+            .post(request)
+            .then(({ data }) => data)
+            .catch((e) => {
+                throw this.createException(e);
+            });
+    }
 }
 
 export default AccountsService;

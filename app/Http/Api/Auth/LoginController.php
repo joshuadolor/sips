@@ -22,7 +22,7 @@ class LoginController extends BaseController
         $user = Auth::user();
 
         if (!$user->is_active) {
-            return $this->sendError('Account not active.', ['error' => 'Account not active'], 400);
+            return $this->sendError('Account not active. Contact the admin for account activation.', ['error' => 'Account not active'], 400);
         }
 
         $data = [

@@ -49,6 +49,7 @@ Route::group([
         ], function () {
             Route::get('/', 'AccountController@profile');
             Route::post('/change-password', 'AccountController@changePassword');
+            Route::post('/reset-password', 'AccountController@resetPassword');
         });
 
         Route::group([

@@ -25,6 +25,14 @@
                     type="password"
                     v-model="newPassword"
                     label="New Password"
+                    :rules="
+                        getRules(
+                            currentPassword,
+                            ['required'],
+                            'New Password',
+                            'new_password'
+                        )
+                    "
                 ></v-text-field>
                 <v-text-field
                     v-model="newConfirmPassword"

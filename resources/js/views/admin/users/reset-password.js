@@ -1,46 +1,29 @@
-import Service from "~/services/ResourceService";
+import Service from "~/services/AccountService";
 
 export default {
     data() {
         return {
-            togglingUser: false,
+            resettingPassword: false,
         };
     },
     methods: {
-        async toggleUser() {
-            this.togglingUser = true;
+        async resetPassword(id) {
+            this.resettingPassword = true;
             try {
                 const request = {
-                    is_active: this.toggleUserActive ? 0 : 1,
+                    user_id: id,
                 };
-                const service = Service.update(
-                    "users",
-                    this.toggleUserData.id,
-                    request
-                );
+                const service = Service.resetPassword(request);
                 const data = await service;
 
-                const message = `User ${
-                    this.toggleUserActive ? "Deactivated" : "Activated"
-                }`;
-
-                this.$root.$emit("showSnackbar", message);
-                this.$emit("toggle-user-success", data);
+                this.$root.$emit("showSnackbar", "Password Reset Successful");
+                this.$emit("reset-password-success", data);
             } catch (exception) {
-                console.log(exception);
                 const message = exception.getMessages();
                 this.apiErrors = message;
             }
 
-            this.togglingUser = false;
-        },
-    },
-    computed: {
-        toggleUserActive() {
-            return this.toggleUserData.is_active;
-        },
-        toggleUserData() {
-            return this.toUpdate;
+            this.resettingPassword = false;
         },
     },
 };

@@ -232,4 +232,6 @@ return [
 
     ],
 
+    'default_password' => env('DEFAULT_PASSWORD', 'S1ps!'),
+
 ];

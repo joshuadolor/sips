@@ -19,7 +19,7 @@
                     {{ item.is_active ? "Deactivate" : "Activate" }}
                 </v-btn>
                 <v-btn
-                    @click="setToUpdate(item, 'resetPasswordModal')"
+                    @click="setToUpdate(item.id, 'resetPasswordModal')"
                     color="warning"
                     small
                     class="ma-1"
@@ -58,8 +58,8 @@
                 <v-btn text @click="close">cancel</v-btn>
                 <v-btn
                     color="primary"
-                    :loading="togglingUser"
-                    @click="toggleUser"
+                    :loading="resettingPassword"
+                    @click="resetPassword(toUpdate)"
                     elevation="0"
                     >Proceed</v-btn
                 >
@@ -71,11 +71,12 @@
 <script>
 import ResourceListPage from "~/components/ResourceListPage";
 import toggleUser from "./toggle-user";
+import resetPassword from "./reset-password";
 
 export default {
     name: "UsersPage",
     extends: ResourceListPage,
-    mixins: [toggleUser],
+    mixins: [toggleUser, resetPassword],
     data() {
         return {
             defaultPassword: "S1ps!",
@@ -145,6 +146,9 @@ export default {
         this.$on("toggle-user-success", () => {
             this.$refs.toggleModal.close();
             this.fetchData();
+        });
+        this.$on("reset-password-success", () => {
+            this.$refs.resetPasswordModal.close();
         });
     },
 };
