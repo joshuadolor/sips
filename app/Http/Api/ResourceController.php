@@ -10,6 +10,7 @@ use App\Models\Payroll as PayrollModel;
 use App\Models\Product as ProductModel;
 use App\Models\User as UserModel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ResourceController extends BaseController
 {
@@ -72,13 +73,30 @@ class ResourceController extends BaseController
                 'model' => ProductModel::class,
                 'role' => ['get' => 0, 'create' => 1, 'update' => 1],
                 'rules' => [
-                    'name' => "required|unique:products,name",
+                    'name' => [
+                        "required",
+                        Rule::unique('products')
+                            ->where(function ($query) {
+                                return $query->where('name', request()->name)
+                                    ->where('company_id', request()->company_id);
+                            })
+                        ,
+                    ],
                     'price' => 'required|numeric|min:0|not_in:0',
                     'item_code' => 'required|unique:products,item_code',
                 ],
                 'updateRules' => function ($id) {
                     return [
-                        'name' => "required|unique:products,name,$id",
+                        'name' => [
+                            "required",
+                            Rule::unique('products')
+                                ->where(function ($query) use ($id) {
+                                    return $query->where('name', request()->name)
+                                        ->where('company_id', request()->company_id);
+                                })
+                                ->where('id', "<>", $id)
+                            ,
+                        ],
                         'price' => 'required|numeric|min:0|not_in:0',
                         'item_code' => "required|unique:products,item_code,$id",
                     ];
