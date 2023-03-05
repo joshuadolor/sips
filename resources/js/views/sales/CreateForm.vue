@@ -63,6 +63,7 @@
                                 v-if="sameQuantities"
                                 label="Quantity"
                                 dense
+                                min="1"
                                 type="number"
                                 v-model="lastQuantityValue"
                             >

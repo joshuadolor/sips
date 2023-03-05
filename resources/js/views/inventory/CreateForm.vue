@@ -69,6 +69,7 @@
                             <v-text-field
                                 v-if="sameQuantities"
                                 label="Quantity"
+                                min="1"
                                 dense
                                 type="number"
                                 v-model="lastQuantityValue"
@@ -161,7 +162,7 @@ export default {
             service: Service,
 
             selectedProducts: [],
-            lastQuantityValue: 0,
+            lastQuantityValue: 1,
             sameQuantities: false,
         };
     },
