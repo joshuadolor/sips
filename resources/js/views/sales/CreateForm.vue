@@ -35,13 +35,6 @@
             ]"
             return-object
         ></v-autocomplete>
-        <v-switch
-            true-value="receive"
-            false-value="transfer"
-            inset
-            v-model="type"
-            :label="`Type: ${type === 'receive' ? 'Receive' : 'Transfer'}`"
-        ></v-switch>
 
         <v-autocomplete
             label="Agent"
@@ -134,39 +127,18 @@
 </template>
 
 <script>
-import BaseCreateFrom from "~/components/forms/BaseCreateForm";
+import CreateInventoryModule from "~/views/inventory/CreateForm";
 import Service from "~/services/ProductMovementService";
-import FetchProductsMixin from "~/mixins/fetch-products";
-import FetchAgentsMixin from "~/mixins/fetch-agents";
-import { currency } from "~/helpers";
-
-const formData = {
-    type: "receive",
-    quantity: "",
-    agent_id: "",
-    product_id: "",
-};
 
 export default {
-    name: "ReceiveTransferProducts",
-    extends: BaseCreateFrom,
-    mixins: [FetchAgentsMixin, FetchProductsMixin],
+    name: "CreateSales",
+    extends: CreateInventoryModule,
     data() {
         return {
-            ...formData,
-            formData,
-            formKeys: Object.keys(formData),
-            resourceTerm: "products",
-            dataExceptions: ["company_id"],
-            service: Service,
-
-            selectedProducts: [],
-            lastQuantityValue: 0,
-            sameQuantities: false,
+            type: "sales",
         };
     },
     methods: {
-        currency,
         async submit() {
             this.attemptSubmit();
             if (!this.dataForSubmission) {
@@ -200,37 +172,6 @@ export default {
             }
 
             this.isSubmitting = false;
-        },
-        updateQuantity(v, id) {
-            this.selectedProducts = this.selectedProducts.map((prod) => {
-                if (prod.id === id) {
-                    prod.toProcessQuantity = parseInt(v);
-                }
-                return prod;
-            });
-        },
-    },
-    watch: {
-        lastQuantityValue(val) {
-            this.selectedProducts.forEach((product) => {
-                product.toProcessQuantity = val;
-            });
-        },
-        sameQuantities(val) {
-            if (val) {
-                this.selectedProducts.forEach((product) => {
-                    product.toProcessQuantity = this.lastQuantityValue;
-                });
-            }
-        },
-    },
-    computed: {
-        processedProducts() {
-            return this.products.map((product) => {
-                product.test = "";
-                product.toProcessQuantity = this.lastQuantityValue;
-                return product;
-            });
         },
     },
 };

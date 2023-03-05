@@ -11,18 +11,12 @@ class ProductMovementController extends BaseController
 {
     public function index()
     {
-        $user = auth()->user();
-        $role = $user->role;
+        $types = isset(request()->sales) ? ['sales'] : ['receive', 'transfer'];
 
-        //super admin no company filtering
-        $data = Model::get();
-        if ($role !== 2) {
-            $company = $user->company;
-            $data = Model::whereHas('product', function ($query) use ($company) {
-                return $query->where('company_id', '=', $company->id);
-            })->get();
-        }
-        $data = $this->query()->get();
+        $data = $this->query()
+            ->whereIn('type', $types)
+            ->get();
+
         return $this->sendResponse($data);
     }
 

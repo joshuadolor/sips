@@ -36,17 +36,11 @@
                 <v-chip color="primary" v-if="item.type === 'receive'"
                     >Receive</v-chip
                 >
-                <v-chip v-else dark color="black">Transfer</v-chip>
-            </template>
-
-            <template v-slot:item.actions="{ item }">
-                <v-btn
-                    small
-                    elevation="0"
-                    color="amber darken-2"
-                    @click="openUpdateModal(item)"
-                    dark
-                    >Update</v-btn
+                <v-chip v-else-if="item.type === 'transfer'" dark color="black"
+                    >Transfer</v-chip
+                >
+                <v-chip v-else-if="item.type === 'sales'" dark color="green"
+                    >Sales</v-chip
                 >
             </template>
         </v-data-table>
@@ -71,6 +65,16 @@ export default {
     methods: {
         currency,
         format,
+        async fetchData() {
+            this.$root.$emit("pageLoading");
+            try {
+                this.items = await this.service.get(this.getParams);
+            } catch (exception) {
+                const message = exception.getMessage() || "Invalid Credentials";
+                this.$root.$emit("showSnackbar", message, "red");
+            }
+            this.$root.$emit("pageLoading", false);
+        },
     },
     data() {
         return {
@@ -93,7 +97,7 @@ export default {
                 },
                 {
                     value: "quantity",
-                    text: "Quantity",
+                    text: "Processed Quantity",
                 },
                 {
                     value: "agent.full_name",

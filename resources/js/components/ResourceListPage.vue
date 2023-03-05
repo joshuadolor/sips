@@ -20,6 +20,7 @@ export default {
             service: ResourceService,
             resourceTerm: "",
             toUpdate: {},
+            getParams: {},
             additionalHeaders: [
                 {
                     text: "Actions",
@@ -33,7 +34,10 @@ export default {
         async fetchData() {
             this.$root.$emit("pageLoading");
             try {
-                this.items = await this.service.get(this.resourceTerm);
+                this.items = await this.service.get(
+                    this.resourceTerm,
+                    this.getParams
+                );
             } catch (exception) {
                 const message = exception.getMessage() || "Invalid Credentials";
                 this.$root.$emit("showSnackbar", message, "red");

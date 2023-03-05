@@ -9,10 +9,10 @@ export default class BaseService {
         return this.factory.make(e);
     }
 
-    static get() {
+    static get(params = {}) {
         return this.client
             .setUrl(this.endpoint)
-            .get()
+            .get(params)
             .then(({ data }) => data)
             .catch((e) => {
                 throw this.createException(e);

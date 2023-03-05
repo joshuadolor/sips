@@ -3,10 +3,10 @@ import BaseService from "./BaseService";
 class ResourceService extends BaseService {
     static endpoint = "/resource";
 
-    static get(targetResource) {
+    static get(targetResource, getParams = {}) {
         return this.client
             .setUrl(`${this.endpoint}/${targetResource}`)
-            .get()
+            .get(getParams)
             .then(({ data }) => data)
             .catch((e) => {
                 throw this.createException(e);
