@@ -18,6 +18,14 @@
                             @close="close"
                         />
                     </CustomModal>
+                    <v-btn
+                        :disabled="items.length < 1"
+                        @click="saveReport"
+                        color="warning darken-2"
+                    >
+                        <v-icon class="mr-2">mdi-download</v-icon>
+                        Download Report</v-btn
+                    >
                     <v-text-field
                         prepend-inner-icon="mdi-magnify"
                         v-model="search"
@@ -27,7 +35,12 @@
             </v-row>
         </v-container>
 
-        <v-data-table :search="search" :items="items" :headers="rawHeaders">
+        <v-data-table
+            @current-items="getFiltered"
+            :search="search"
+            :items="items"
+            :headers="rawHeaders"
+        >
             <template v-slot:item.created_at="{ item }">
                 {{ format(new Date(item.created_at), "Y-MM-dd HH:mm:ss") }}
             </template>
@@ -112,6 +125,13 @@ export default {
 
             resourceName: "Inventory",
             service: Service,
+            reportValues: {
+                created_at: (item) =>
+                    format(new Date(item.created_at), "Y-MM-dd HH:mm:ss"),
+                "product.item_code": (item) => item.product.item_code,
+                "product.name": (item) => item.product.name,
+                "agent.full_name": (item) => item.agent.full_name,
+            },
         };
     },
 };

@@ -52,12 +52,12 @@ export const navMenu = [
             },
         ],
     },
-    {
-        icon: "mdi-book-open",
-        text: "Reports",
-        routeName: "reports",
-        role: ["admin"],
-    },
+    // {
+    //     icon: "mdi-book-open",
+    //     text: "Reports",
+    //     routeName: "reports",
+    //     role: ["admin"],
+    // },
     {
         icon: "mdi-logout",
         text: "Logout",

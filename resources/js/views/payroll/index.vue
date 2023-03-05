@@ -18,6 +18,14 @@
                             @close="close"
                         />
                     </CustomModal>
+                    <v-btn
+                        :disabled="items.length < 1"
+                        @click="saveReport"
+                        color="warning darken-2"
+                    >
+                        <v-icon class="mr-2">mdi-download</v-icon>
+                        Download Report</v-btn
+                    >
                     <v-text-field
                         prepend-inner-icon="mdi-magnify"
                         v-model="search"
@@ -27,7 +35,12 @@
             </v-row>
         </v-container>
 
-        <v-data-table :items="items" :headers="headers">
+        <v-data-table
+            @current-items="getFiltered"
+            :items="items"
+            :headers="headers"
+            :search="search"
+        >
             <template v-slot:item.date="{ item }">
                 {{ item.date_from }} to {{ item.date_until }}
             </template>
@@ -81,8 +94,14 @@ export default {
                     text: "Employee Code",
                 },
                 {
-                    value: "date",
-                    text: "Payroll Date",
+                    value: "date_from",
+                    text: "Date From",
+                    sort: (a, b) => new Date(a) - new Date(b),
+                },
+                {
+                    value: "date_until",
+                    text: "Date To",
+                    sort: (a, b) => new Date(a) - new Date(b),
                 },
                 {
                     value: "employee.full_name",
@@ -116,6 +135,11 @@ export default {
             additionalHeaders: [],
             resourceName: "Payroll",
             onPreview: {},
+            reportValues: {
+                "employee.full_name": (item) => {
+                    return item.employee.full_name;
+                },
+            },
         };
     },
     methods: {

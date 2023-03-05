@@ -47,6 +47,7 @@ class ProductMovementController extends BaseController
             if ($data->type === 'receive') {
                 $product->quantity += $data->quantity;
             } else {
+                //sales and transfer
                 $product->quantity -= $data->quantity;
             }
             $product->save();

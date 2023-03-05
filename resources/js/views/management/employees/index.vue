@@ -18,6 +18,15 @@
                             @close="close"
                         />
                     </CustomModal>
+                    <v-btn
+                        :disabled="items.length < 1"
+                        @click="saveReport"
+                        color="warning darken-2"
+                    >
+                        <v-icon class="mr-2">mdi-download</v-icon>
+                        Download Report</v-btn
+                    >
+
                     <v-text-field
                         prepend-inner-icon="mdi-magnify"
                         v-model="search"
@@ -27,7 +36,12 @@
             </v-row>
         </v-container>
 
-        <v-data-table :search="search" :items="items" :headers="headers">
+        <v-data-table
+            @current-items="getFiltered"
+            :search="search"
+            :items="items"
+            :headers="headers"
+        >
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     small
