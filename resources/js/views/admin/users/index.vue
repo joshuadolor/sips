@@ -18,11 +18,40 @@
                 >
                     {{ item.is_active ? "Deactivate" : "Activate" }}
                 </v-btn>
+                <v-btn
+                    @click="setToUpdate(item, 'resetPasswordModal')"
+                    color="warning"
+                    small
+                    class="ma-1"
+                    elevation="0"
+                    >Reset Password</v-btn
+                >
             </template>
         </v-data-table>
         <CustomModal ref="toggleModal" v-bind="toggleUserAttrs">
             <template>
                 Are you sure you want to proceed? This action cannot be undone.
+            </template>
+            <template v-slot:actions="{ close }">
+                <v-spacer />
+                <v-btn text @click="close">cancel</v-btn>
+                <v-btn
+                    color="primary"
+                    :loading="togglingUser"
+                    @click="toggleUser"
+                    elevation="0"
+                    >Proceed</v-btn
+                >
+            </template>
+        </CustomModal>
+
+        <CustomModal ref="resetPasswordModal" v-bind="resetPasswordAttrs">
+            <template>
+                Are you sure you want to proceed? This action cannot be undone.
+                Default Password is
+                <br />
+                <br />
+                <code>{{ defaultPassword }}</code>
             </template>
             <template v-slot:actions="{ close }">
                 <v-spacer />
@@ -49,6 +78,7 @@ export default {
     mixins: [toggleUser],
     data() {
         return {
+            defaultPassword: "S1ps!",
             rawHeaders: [
                 {
                     value: "first_name",
@@ -81,12 +111,20 @@ export default {
             ],
             resourceTerm: "users",
             toUpdate: {},
+            resetPasswordAttrs: {
+                title: "Reset Password",
+                btnLabel: "",
+                btnAttrs: {
+                    color: "amber darken-2",
+                    hide: true,
+                },
+            },
         };
     },
     methods: {
-        setToUpdate(val) {
+        setToUpdate(val, ref = "toggleModal") {
             this.toUpdate = val;
-            this.$refs.toggleModal.open();
+            this.$refs[ref].open();
         },
     },
     computed: {
@@ -112,4 +150,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+code {
+    font-size: 3em;
+}
+</style>

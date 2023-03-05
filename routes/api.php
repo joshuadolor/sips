@@ -43,7 +43,13 @@ Route::group([
     Route::group([
         'namespace' => 'App\Http\Api',
     ], function () {
-        Route::get('account', 'AccountController@profile');
+
+        Route::group([
+            'prefix' => 'account',
+        ], function () {
+            Route::get('/', 'AccountController@profile');
+            Route::post('/change-password', 'AccountController@changePassword');
+        });
 
         Route::group([
             'prefix' => 'resource',
