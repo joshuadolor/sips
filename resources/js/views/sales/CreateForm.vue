@@ -129,7 +129,8 @@
 
 <script>
 import CreateInventoryModule from "~/views/inventory/CreateForm";
-import Service from "~/services/ProductMovementService";
+import Service from "~/services/SalesService";
+import { mapGetters } from "vuex";
 
 export default {
     name: "CreateSales",
@@ -137,6 +138,7 @@ export default {
     data() {
         return {
             type: "sales",
+            dataExceptions: [],
         };
     },
     methods: {
@@ -149,10 +151,10 @@ export default {
             this.isSubmitting = true;
 
             try {
-                const data = await Promise.all(
-                    this.selectedProducts.map(async (product) => {
-                        const req = {
-                            type: this.type,
+                const req = {
+                    product_movements: this.selectedProducts.map((product) => {
+                        return {
+                            type: "sales",
                             quantity: product.toProcessQuantity,
                             agent_id: this.agent_id,
                             product_id: product.id,
@@ -160,9 +162,10 @@ export default {
                                 parseInt(product.toProcessQuantity) *
                                 parseFloat(product.price),
                         };
-                        return await Service.create(req);
-                    })
-                );
+                    }),
+                    company_id: this.company_id,
+                };
+                const data = await Service.create(req);
 
                 this.$root.$emit("showSnackbar", this.successMessage);
                 this.$emit("success", data);
@@ -173,6 +176,15 @@ export default {
             }
 
             this.isSubmitting = false;
+        },
+    },
+    computed: {
+        ...mapGetters("session", ["isSuperAdmin", "companyId"]),
+        company_id() {
+            if (this.isSuperAdmin) {
+                return this.$store.state.session.superAdminCompanyId;
+            }
+            return this.companyId;
         },
     },
 };

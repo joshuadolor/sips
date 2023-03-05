@@ -60,5 +60,12 @@ Route::group([
             Route::post('/', 'ProductMovementController@store');
         });
 
+        Route::group([
+            'prefix' => 'sales-entry',
+        ], function () {
+            Route::get('/', 'SalesController@index');
+            Route::post('/', 'SalesController@store');
+        });
+
     });
 });

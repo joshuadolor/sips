@@ -19,11 +19,13 @@ class CreateTableProductMovements extends Migration
             $table->string('type');
             $table->integer('quantity')->default(0);
             $table->double('cost', 10, 2);
+            $table->bigInteger('sale_id')->unsigned()->nullable();
             $table->bigInteger('agent_id')->unsigned();
             $table->bigInteger('user_id')->unsigned()->comment('the one who created this movement');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('agent_id')->references('id')->on('agents')->onDelete('cascade');
         });

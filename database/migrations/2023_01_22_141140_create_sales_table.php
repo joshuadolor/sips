@@ -15,9 +15,10 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-
+            $table->bigInteger('user_id')->unsigned()->comment('the one who created this movement');
             $table->bigInteger('company_id')->unsigned();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
             $table->timestamps();

@@ -20,6 +20,7 @@ class ProductMovement extends Model
         'agent_id',
         'product_id',
         'user_id',
+        'sale_id',
     ];
 
     protected $with = ['product', 'agent'];
@@ -32,6 +33,11 @@ class ProductMovement extends Model
     public function agent()
     {
         return $this->belongsTo('App\Models\Agent', 'agent_id');
+    }
+
+    public function sales()
+    {
+        return $this->belongsToMany('App\Models\Sales', 'sale_id')->withPivot(['id'])->withTimestamps();
     }
 
 }
