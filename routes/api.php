@@ -48,6 +48,7 @@ Route::group([
             'prefix' => 'account',
         ], function () {
             Route::get('/', 'AccountController@profile');
+            Route::post('/', 'AccountController@store');
             Route::post('/change-password', 'AccountController@changePassword');
             Route::post('/reset-password', 'AccountController@resetPassword');
         });

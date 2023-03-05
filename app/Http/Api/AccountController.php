@@ -2,6 +2,7 @@
 
 namespace App\Http\Api;
 
+use App\Http\Api\Auth\RegisterController;
 use App\Http\Api\BaseController;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
@@ -46,6 +47,12 @@ class AccountController extends BaseController
         $data = $user->update(['password' => Hash::make(config('app.default_password'))]);
 
         return $this->sendResponse($data);
+    }
+
+    public function store(Request $request)
+    {
+        $registerAccount = new RegisterController();
+        $registerAccount->register($request);
     }
 
 }
