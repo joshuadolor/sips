@@ -17,6 +17,7 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned()->comment('the one who created this movement');
             $table->bigInteger('company_id')->unsigned();
+            $table->date('transaction_date');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

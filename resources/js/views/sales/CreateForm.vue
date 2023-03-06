@@ -5,6 +5,18 @@
         ref="form"
         v-model="formValid"
     >
+        <DatePicker
+            label="Transaction Date"
+            v-model="transaction_date"
+            :rules="
+                getRules(
+                    transaction_date,
+                    ['required'],
+                    'Transaction Date',
+                    'transaction_date'
+                )
+            "
+        />
         <v-autocomplete
             :loading="productsFetching"
             label="Item Code"
@@ -131,14 +143,19 @@
 import CreateInventoryModule from "~/views/inventory/CreateForm";
 import Service from "~/services/SalesService";
 import { mapGetters } from "vuex";
+import DatePicker from "~/components/widgets/DatePicker";
 
 export default {
     name: "CreateSales",
+    components: {
+        DatePicker,
+    },
     extends: CreateInventoryModule,
     data() {
         return {
             type: "sales",
             dataExceptions: [],
+            transaction_date: "",
         };
     },
     methods: {
@@ -164,6 +181,7 @@ export default {
                         };
                     }),
                     company_id: this.company_id,
+                    transaction_date: this.transaction_date,
                 };
                 const data = await Service.create(req);
 

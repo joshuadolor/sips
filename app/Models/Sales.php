@@ -14,6 +14,7 @@ class Sales extends Model
     protected $fillable = [
         'company_id',
         'user_id',
+        'transaction_date',
     ];
 
     public function productMovements()

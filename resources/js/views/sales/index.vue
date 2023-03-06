@@ -115,8 +115,8 @@ export default {
                     text: "#",
                 },
                 {
-                    value: "created_at",
-                    text: "Created At",
+                    value: "transaction_date",
+                    text: "Transaction Date",
                     sort: (a, b) => new Date(a) - new Date(b),
                 },
                 {

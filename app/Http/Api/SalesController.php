@@ -22,6 +22,7 @@ class SalesController extends BaseController
     {
         $rules = [
             'product_movements' => 'required|array',
+            'transaction_date' => 'required',
         ];
 
         $validator = Validator::make(request()->all(), $rules);
@@ -48,6 +49,7 @@ class SalesController extends BaseController
 
             DB::commit();
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
         }
 
