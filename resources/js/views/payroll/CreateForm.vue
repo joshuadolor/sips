@@ -71,71 +71,13 @@
                     </v-autocomplete>
                 </v-col>
             </v-row>
-            <v-row>
-                <v-col cols="12" xs="12" sm="12" md="4">
-                    <v-text-field
-                        v-model="hours"
-                        label="Hours*"
-                        type="number"
-                        @keyup1="minimumZero('hours')"
-                        :rules="[
-                            ...getRules(hours, ['required'], 'Hours', 'hours'),
-                            (v) => v > 0 || 'Hours should be greater than 0',
-                        ]"
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="12" xs="12" sm="12" md="4">
-                    <v-text-field
-                        v-model="rate"
-                        label="Rate*"
-                        @keyup1="minimumZero('rate')"
-                        type="number"
-                        :rules="[
-                            ...getRules(rate, ['required'], 'Rate', 'rate'),
-                            (v) => v > 0 || 'Rate should be greater than 0',
-                        ]"
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="12" xs="12" sm="12" md="4">
-                    <v-text-field
-                        label="Deduction"
-                        v-model="deduction"
-                        @keyup1="minimumZero('deduction')"
-                        type="number"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col
-                    class="font-weight-bold"
-                    cols="12"
-                    xs="12"
-                    sm="12"
-                    md="6"
-                >
-                    <div>Days: {{ days }}</div>
-                    <div>Rate: {{ rate }}</div>
-                    <div>Hours: {{ hours }}</div>
-                </v-col>
-                <v-col
-                    class="text-right font-weight-bold"
-                    cols="12"
-                    xs="12"
-                    sm="12"
-                    md="6"
-                >
-                    <div class="text-h6">
-                        Subtotal: {{ currency(subTotal) }}
-                    </div>
-                    <div v-if="deduction" class="text-h6">
-                        Deductions: ({{ currency(deduction) }})
-                    </div>
-                    <div class="text-h5">
-                        Total Salary: {{ currency(total, "₱") }}
-                    </div>
-                </v-col>
-            </v-row>
-            <v-divider />
+
+            <CreateTable
+                v-if="employee.length > 0"
+                :employees="employee"
+                ref="table"
+            />
+
             <v-container class="mt-3">
                 <v-row>
                     <v-col class="text-right">
@@ -185,6 +127,7 @@ const getDateDifference = (date1, date2) => {
     return Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
 };
 import ResourceService from "~/services/ResourceService";
+import CreateTable from "./CreateTable";
 
 export default {
     name: "CreatePayrollForm",
@@ -192,6 +135,7 @@ export default {
     mixins: [fetchEmployees],
     components: {
         DatePicker,
+        CreateTable,
     },
     data() {
         return {
@@ -225,11 +169,21 @@ export default {
             if (!this.dataForSubmission) {
                 return;
             }
+            const data = this.$refs.table.rows;
+
+            if (
+                !data.every((d) => {
+                    return d.hours > 0 && d.rate > 0;
+                })
+            ) {
+                return;
+            }
+
             this.isSubmitting = true;
 
             try {
                 await Promise.all(
-                    this.employee.map(async (emp) => {
+                    data.map(async (emp) => {
                         const req = {
                             company_id: emp.company_id,
                             employee_code: emp.employee_code,
@@ -239,6 +193,9 @@ export default {
                                 (a, b) => ({ ...a, [b]: this[b] }),
                                 {}
                             ),
+                            hours: emp.hours,
+                            rate: emp.rate,
+                            deduction: emp.deduction,
                         };
                         return await ResourceService.create("payroll", req);
                     })
