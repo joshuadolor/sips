@@ -53,7 +53,7 @@ class ProductMovementController extends BaseController
                         ELSE 0
                 END) as 'Balance'
             "
-        )->groupBy('p.id', 'p.item_code', 'p.name');
+        )->groupBy('p.id', 'p.item_code', 'p.name', 'p.quantity');
 
         if ($isAdminUser) {
             $query = $query->where('p.company_id', $company->id);
