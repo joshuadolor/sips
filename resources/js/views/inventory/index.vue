@@ -18,14 +18,33 @@
                             @close="close"
                         />
                     </CustomModal>
-                    <v-btn
-                        :disabled="items.length < 1"
-                        @click="saveReport"
-                        color="warning darken-2"
-                    >
-                        <v-icon class="mr-2">mdi-download</v-icon>
-                        Download Report</v-btn
-                    >
+
+                    <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                :disabled="items.length < 1"
+                                v-bind="attrs"
+                                v-on="on"
+                                color="warning darken-2"
+                            >
+                                <v-icon class="mr-2">mdi-download</v-icon>
+                                Reports</v-btn
+                            >
+                        </template>
+                        <v-list>
+                            <v-list-item @click="saveReport">
+                                <v-list-item-title
+                                    >Standard Report</v-list-item-title
+                                >
+                            </v-list-item>
+                            <v-list-item @click="downloadOnHand">
+                                <v-list-item-title
+                                    >On Hand Report</v-list-item-title
+                                >
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+
                     <v-text-field
                         prepend-inner-icon="mdi-magnify"
                         v-model="search"
@@ -68,6 +87,8 @@ import { currency } from "~/helpers";
 import Service from "~/services/ProductMovementService";
 import { format } from "date-fns";
 
+import downloadOnHandMixin from "./download-on-hand";
+
 export default {
     name: "Inventory",
     extends: ResourceListPage,
@@ -75,6 +96,7 @@ export default {
         CreateForm,
         UpdateForm,
     },
+    mixins: [downloadOnHandMixin],
     methods: {
         currency,
         format,

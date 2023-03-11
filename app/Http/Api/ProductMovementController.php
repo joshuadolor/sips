@@ -20,6 +20,48 @@ class ProductMovementController extends BaseController
         return $this->sendResponse($data);
     }
 
+    public function onHand()
+    {
+
+        $user = auth()->user();
+        $isNormalUser = $user->role === 0;
+        $isAdminUser = $user->role === 1;
+
+        if ($isNormalUser) {
+            return $this->sendError("Forbidden", null, 403);
+        }
+
+        $company = $user->company;
+
+        $query = DB::table('products as p')->leftJoin('product_movements as pm', 'pm.product_id', '=', 'p.id')->selectRaw(
+            "p.item_code as 'Item Code',
+            p.name as 'Item Name',
+                p.quantity +
+                SUM(
+                    CASE
+                        WHEN pm.type='receive' then pm.quantity
+                        WHEN pm.type='sales' or pm.type='transfer' then (-pm.quantity)
+                        ELSE 0
+                    END) as 'Quantity on hand',
+                SUM(CASE WHEN pm.type='sales' then pm.quantity else 0 END) as 'Quantity Sold',
+                SUM(CASE WHEN pm.type='receive' then pm.quantity else 0 END) as 'Quantity Received',
+                SUM(CASE WHEN pm.type='transfer' then pm.quantity else 0 END) as 'Quantity Transfered',
+                SUM(
+                    CASE
+                        WHEN pm.type='receive' then (-pm.cost)
+                        WHEN pm.type='sales' or pm.type='transfer' then (pm.cost)
+                        ELSE 0
+                END) as 'Balance'
+            "
+        )->groupBy('p.id');
+
+        if ($isAdminUser) {
+            $query = $query->where('p.company_id', $company->id);
+        }
+
+        return $this->sendResponse($query->get());
+    }
+
     public function store()
     {
         $rules = [

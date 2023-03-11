@@ -24,7 +24,7 @@
                         color="warning darken-2"
                     >
                         <v-icon class="mr-2">mdi-download</v-icon>
-                        Save Report</v-btn
+                        Download Report</v-btn
                     >
                     <v-text-field
                         prepend-inner-icon="mdi-magnify"

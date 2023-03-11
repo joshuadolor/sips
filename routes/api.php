@@ -66,6 +66,7 @@ Route::group([
         ], function () {
             Route::get('/', 'ProductMovementController@index');
             Route::post('/', 'ProductMovementController@store');
+            Route::get('/report/on-hand', 'ProductMovementController@onHand');
         });
 
         Route::group([
