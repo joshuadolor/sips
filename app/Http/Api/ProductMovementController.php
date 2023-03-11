@@ -33,6 +33,13 @@ class ProductMovementController extends BaseController
 
         $company = $user->company;
 
+        // p.quantity + SUM(
+        //     CASE
+        //         WHEN pm.type='receive' then (-pm.quantity)
+        //         WHEN pm.type='sales' or pm.type='transfer' then (pm.quantity)
+        //         ELSE 0
+        // END) as 'Replenished Quantity'
+
         $query = DB::table('products as p')->leftJoin('product_movements as pm', 'pm.product_id', '=', 'p.id')->selectRaw(
             "p.item_code as 'Item Code',
             p.name as 'Item Name',
