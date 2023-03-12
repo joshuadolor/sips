@@ -47,10 +47,10 @@ class ProductMovementController extends BaseController
                 SUM(CASE WHEN pm.type='sales' then pm.quantity else 0 END) as 'Quantity Sold',
                 SUM(CASE WHEN pm.type='receive' then pm.quantity else 0 END) as 'Quantity Received',
                 SUM(CASE WHEN pm.type='transfer' then pm.quantity else 0 END) as 'Quantity Transfered',
-                SUM(
+                p.quantity + SUM(
                     CASE
-                        WHEN pm.type='receive' then (-pm.cost)
-                        WHEN pm.type='sales' or pm.type='transfer' then (pm.cost)
+                        WHEN pm.type='receive' then (pm.quantity)
+                        WHEN pm.type='sales' or pm.type='transfer' then (-pm.quantity)
                         ELSE 0
                 END) as 'Balance'
             "
