@@ -20,22 +20,7 @@
                         >
                         </v-text-field>
                     </th>
-                    <th class="text-right">
-                        <v-checkbox v-model="sameRate" dense>
-                            <template v-slot:label>
-                                <small v-if="!sameRate">Rate</small>
-                            </template>
-                        </v-checkbox>
-                        <v-text-field
-                            v-if="sameRate"
-                            label="Rate"
-                            min="1"
-                            dense
-                            type="number"
-                            v-model="lastRateValue"
-                        >
-                        </v-text-field>
-                    </th>
+                    <th class="text-right">Rate</th>
                     <th class="text-right">
                         <v-checkbox v-model="sameDeduction" dense>
                             <template v-slot:label>
@@ -48,7 +33,7 @@
                             min="1"
                             dense
                             type="number"
-                            v-model="lastRateValue"
+                            v-model="lastDeductionValue"
                         >
                         </v-text-field>
                     </th>
@@ -74,15 +59,7 @@
                         />
                     </td>
                     <td class="text-center">
-                        <v-text-field
-                            type="number"
-                            min="1"
-                            v-model="rows[idx].rate"
-                            hide-details="auto"
-                            label="Rate"
-                            :disabled="sameRate"
-                            @input="updateValue('rate', item.rate, item.id)"
-                        />
+                        {{ currency(item.rate) }}
                     </td>
                     <td class="text-center">
                         <v-text-field
@@ -153,11 +130,9 @@ export default {
     data() {
         return {
             sameHours: false,
-            sameRate: false,
             sameDeduction: false,
 
             lastHoursValue: 1,
-            lastRateValue: 1,
             lastDeductionValue: 0,
 
             rows: [],
@@ -181,7 +156,6 @@ export default {
                 this.rows = val.map((row) => {
                     row.hours = this.lastHoursValue;
                     row.deduction = this.lastDeductionValue;
-                    row.rate = this.lastRateValue;
 
                     return row;
                 });
@@ -202,14 +176,6 @@ export default {
 
             this.rows = this.rows.map((row) => {
                 row.deduction = val;
-                return row;
-            });
-        },
-        lastRateValue(val) {
-            if (!val) return;
-
-            this.rows = this.rows.map((row) => {
-                row.rate = val;
                 return row;
             });
         },

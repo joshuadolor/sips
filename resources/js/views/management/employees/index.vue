@@ -42,6 +42,9 @@
             :items="items"
             :headers="headers"
         >
+            <template v-slot:item.rate="{ item }">
+                {{ currency(item.rate) }}
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     small
@@ -75,6 +78,7 @@ import ResourceListPage from "~/components/ResourceListPage";
 import CreateForm from "~/views/management/employees/CreateForm";
 import UpdateForm from "~/views/management/employees/UpdateForm";
 
+import { currency } from "~/helpers";
 export default {
     name: "EmployeesManagement",
     extends: ResourceListPage,
@@ -84,6 +88,7 @@ export default {
     },
     data() {
         return {
+            currency,
             rawHeaders: [
                 {
                     value: "employee_code",
@@ -100,6 +105,10 @@ export default {
                 {
                     value: "middle_name",
                     text: "Middle Name",
+                },
+                {
+                    value: "rate",
+                    text: "Rate",
                 },
             ],
             resourceTerm: "employees",

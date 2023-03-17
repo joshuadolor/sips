@@ -18,6 +18,16 @@
             :rules="getRules(last_name, ['required'], 'Last Name', 'last_name')"
         ></v-text-field>
         <v-text-field label="Middle Name" v-model="middle_name"></v-text-field>
+
+        <v-text-field
+            type="number"
+            min="1"
+            v-model="rate"
+            hide-details="auto"
+            label="Rate"
+            :rules="getRules(rate, ['required'], 'Rate', 'rate')"
+        />
+
         <v-text-field
             label="Employee Code"
             v-model="employee_code"
@@ -64,6 +74,7 @@ const formData = {
     middle_name: "",
     last_name: "",
     email: "",
+    rate: "",
     employee_code: generateRandomString(8, "EMPL-"),
 };
 
