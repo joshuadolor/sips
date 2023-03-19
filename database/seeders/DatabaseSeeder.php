@@ -13,6 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $freshInstall = env('CLEAN_DATA', false);
+
+        if ($freshInstall) {
+            \App\Models\User::create([
+                'first_name' => "Sips",
+                'last_name' => "Admin",
+                'middle_name' => "Super",
+                'email' => "admin@easybizit.net",
+                'email_verified_at' => now(),
+                'is_active' => 1,
+                'role' => 2,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            ]);
+            return;
+        }
+
         \App\Models\Company::factory(15)->create();
         \App\Models\User::create([
             'first_name' => "Sips",
