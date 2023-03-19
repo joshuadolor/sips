@@ -117,12 +117,12 @@ export default {
             nameRules: (field) => [
                 (v) => !!v || `${field} is required`,
                 (v) =>
-                    v.length <= 20 ||
+                    v.length <= 21 ||
                     `${field} must be less than 20 characters`,
             ],
             middleNameRules: [
                 (v) =>
-                    v.length <= 20 ||
+                    v.length <= 21 ||
                     "Middle Name must be less than 20 characters",
             ],
             emailRules: [
@@ -152,7 +152,15 @@ export default {
                 window.location =
                     "/login?app-message=The admin will activate your account please wait or notify him/her.";
             } catch (e) {
-                console.log(e);
+                if (e.response.data?.errors) {
+                    const message = Object.values(
+                        e.response.data.errors
+                    ).reduce((a, b) => [...a, ...b], []);
+                    this.$root.$emit("showSnackbar", message[0], "red");
+                } else {
+                    const message = e.getMessage() || "Invalid Credentials";
+                    this.$root.$emit("showSnackbar", message, "red");
+                }
             }
 
             this.loading = false;
