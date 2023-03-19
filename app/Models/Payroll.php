@@ -38,6 +38,6 @@ class Payroll extends Model
 
     public function getTotalAttribute()
     {
-        return ($this->hours * $this->rate) - $this->deductions;
+        return ($this->hours * $this->rate) - $this->deduction;
     }
 }

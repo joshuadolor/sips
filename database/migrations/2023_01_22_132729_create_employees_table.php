@@ -19,6 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('middle_name')->nullable();
+            $table->decimal('rate')->default(0);
             // $table->string('email')->nullable()->unique();
 
             $table->bigInteger('created_by')->nullable()->unsigned();

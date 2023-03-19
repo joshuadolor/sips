@@ -51,6 +51,7 @@ Route::group([
             Route::post('/', 'AccountController@store');
             Route::post('/change-password', 'AccountController@changePassword');
             Route::post('/reset-password', 'AccountController@resetPassword');
+            Route::put('/{id}', 'AccountController@update');
         });
 
         Route::group([

@@ -7,6 +7,7 @@
         v-model="internalValue"
         :loading="companiesFetching"
         return-object
+        v-bind="$attrs"
     >
     </v-autocomplete>
 </template>

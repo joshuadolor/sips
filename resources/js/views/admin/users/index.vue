@@ -26,6 +26,16 @@
                     elevation="0"
                     >Reset Password</v-btn
                 >
+
+                <v-btn
+                    v-if="item.role !== 2"
+                    @click="setToUpdate(item.id, 'updateUserModal')"
+                    small
+                    outlined
+                    class="ma-1"
+                    elevation="0"
+                    >Update</v-btn
+                >
             </template>
         </v-data-table>
         <CustomModal ref="toggleModal" v-bind="toggleUserAttrs">
@@ -42,6 +52,16 @@
                     elevation="0"
                     >Proceed</v-btn
                 >
+            </template>
+        </CustomModal>
+
+        <CustomModal ref="updateUserModal" v-bind="updateUserAttrs">
+            <template v-slot="{ close }">
+                <UpdateForm
+                    @success="fetchData"
+                    @close="close"
+                    :default-data="userData"
+                />
             </template>
         </CustomModal>
 
@@ -72,11 +92,15 @@
 import ResourceListPage from "~/components/ResourceListPage";
 import toggleUser from "./toggle-user";
 import resetPassword from "./reset-password";
+import UpdateForm from "./UpdateForm";
 
 export default {
     name: "UsersPage",
     extends: ResourceListPage,
     mixins: [toggleUser, resetPassword],
+    components: {
+        UpdateForm,
+    },
     data() {
         return {
             defaultPassword: "S1ps!",
@@ -120,6 +144,14 @@ export default {
                     hide: true,
                 },
             },
+            updateUserAttrs: {
+                title: "Update User",
+                btnLabel: "",
+                btnAttrs: {
+                    color: "amber darken-2",
+                    hide: true,
+                },
+            },
         };
     },
     methods: {
@@ -140,6 +172,11 @@ export default {
                     hide: true,
                 },
             };
+        },
+        userData() {
+            if (!this.toUpdate) return {};
+
+            return this.items.find((item) => item.id === this.toUpdate);
         },
     },
     mounted() {

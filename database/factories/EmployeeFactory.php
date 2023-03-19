@@ -17,6 +17,7 @@ class EmployeeFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'middle_name' => $this->faker->lastName(),
+            'rate' => $this->faker->randomDigitNotZero() * 1000,
             'company_id' => \App\Models\Company::pluck('id')->random(),
             'employee_code' => "EMPL-" . $this->faker->randomNumber(8),
         ];

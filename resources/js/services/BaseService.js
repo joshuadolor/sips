@@ -28,4 +28,14 @@ export default class BaseService {
                 throw this.createException(e);
             });
     }
+
+    static update(id, request) {
+        return this.client
+            .setUrl(`${this.endpoint}/${id}`)
+            .put(request)
+            .then(({ data }) => data)
+            .catch((e) => {
+                throw this.createException(e);
+            });
+    }
 }

@@ -55,4 +55,23 @@ class AccountController extends BaseController
         $registerAccount->register($request);
     }
 
+    public function update($id, Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'middle_name' => '',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'company_id' => 'required',
+        ]);
+
+        $user = User::find($id);
+        if (!$user) {
+            return $this->sendError('User not found.', ['error' => 'User not found'], 404);
+        }
+        $data = $user->update($request->all());
+
+        return $this->sendResponse($data);
+    }
+
 }

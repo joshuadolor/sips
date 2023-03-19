@@ -42,12 +42,14 @@ class ResourceController extends BaseController
                 'rules' => [
                     'first_name' => 'required',
                     'last_name' => 'required',
+                    'rate' => 'required|numeric|gt:0',
                     'employee_code' => 'required|unique:employees,employee_code',
                 ],
                 'updateRules' => function ($id) {
                     return [
                         'first_name' => 'required',
                         'last_name' => 'required',
+                        'rate' => 'required|numeric|gt:0',
                         'employee_code' => "required|unique:employees,employee_code,$id",
                     ];
                 },

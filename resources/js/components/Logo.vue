@@ -7,7 +7,7 @@ export default {
     name: "CompanyLogo",
     data() {
         return {
-            src: "https://img.logoipsum.com/256.svg",
+            src: "/images/logo.png",
         };
     },
 };

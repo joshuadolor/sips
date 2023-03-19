@@ -18,6 +18,7 @@ class Employee extends Model
         'first_name',
         'last_name',
         'middle_name',
+        'rate',
         'company_id',
         'employee_code',
         'created_by',
