@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => "Sips",
                 'last_name' => "Admin",
                 'middle_name' => "Super",
-                'email' => "admin@easybizit.net",
+                'email' => env('ADMIN_EMAIL', "admin@easybizit.net"),
                 'email_verified_at' => now(),
                 'is_active' => 1,
                 'role' => 2,

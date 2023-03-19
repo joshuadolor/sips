@@ -49,7 +49,7 @@
         ></v-autocomplete>
 
         <v-autocomplete
-            label="Agent"
+            label="Agent/Store"
             :items="agents"
             v-model="agent_id"
             item-value="id"

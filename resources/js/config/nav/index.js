@@ -47,7 +47,7 @@ export const navMenu = [
             },
             {
                 icon: "mdi-target-account",
-                text: "Agents",
+                text: "Agents/Store",
                 routeName: "management.agents",
             },
         ],

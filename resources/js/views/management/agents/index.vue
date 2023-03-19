@@ -98,18 +98,18 @@ export default {
             ],
             resourceTerm: "agents",
             createModalAttrs: {
-                title: "Create Agent",
+                title: "Create Agent/Store",
                 btnLabel: "Create New",
             },
             updateModalAttrs: {
-                title: "Update Agent",
+                title: "Update Agent/Store",
                 btnLabel: "Update",
                 btnAttrs: {
                     color: "amber darken-2",
                     hide: true,
                 },
             },
-            resourceName: "Agents",
+            resourceName: "Agents/Stores",
         };
     },
 };

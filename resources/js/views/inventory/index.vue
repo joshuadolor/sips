@@ -136,7 +136,7 @@ export default {
                 },
                 {
                     value: "agent.full_name",
-                    text: "Agent",
+                    text: "Agent/Store",
                 },
             ],
             resourceTerm: "products",
