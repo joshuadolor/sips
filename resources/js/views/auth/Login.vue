@@ -61,8 +61,8 @@ export default {
     },
     data() {
         return {
-            email: "superAdminUser@sips.com",
-            password: "password",
+            email: "",
+            password: "",
             loading: false,
             isValid: false,
             passwordRules: [(v) => !!v || `Password is required`],

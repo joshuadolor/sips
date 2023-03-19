@@ -57,6 +57,9 @@ class AccountController extends BaseController
 
     public function update($id, Request $request)
     {
+        if (auth()->user()->role !== 2) {
+            return $this->sendError('Unauthorized.', ['error' => 'Unauthorized'], 401);
+        }
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
