@@ -43,16 +43,10 @@ class ProductMovementController extends BaseController
         $query = DB::table('products as p')->leftJoin('product_movements as pm', 'pm.product_id', '=', 'p.id')->selectRaw(
             "p.item_code as 'Item Code',
             p.name as 'Item Name',
-                p.quantity + SUM(
-                    CASE
-                        WHEN pm.type='receive' then (-pm.quantity)
-                        WHEN pm.type='sales' or pm.type='transfer' then (pm.quantity)
-                        ELSE 0
-                   END) as 'Quantity on hand',
+                p.quantity as 'Quantity on hand',
                 SUM(CASE WHEN pm.type='sales' then pm.quantity else 0 END) as 'Quantity Sold',
                 SUM(CASE WHEN pm.type='receive' then pm.quantity else 0 END) as 'Quantity Received',
-                SUM(CASE WHEN pm.type='transfer' then pm.quantity else 0 END) as 'Quantity Transfered',
-                p.quantity as 'Balance'
+                SUM(CASE WHEN pm.type='transfer' then pm.quantity else 0 END) as 'Quantity Transferred'
             "
         )->groupBy('p.id', 'p.item_code', 'p.name', 'p.quantity');
 

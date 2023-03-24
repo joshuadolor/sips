@@ -12,8 +12,7 @@ export default {
                 "Quantity on hand",
                 "Quantity Sold",
                 "Quantity Received",
-                "Quantity Transfered",
-                "Balance",
+                "Quantity Transferred",
             ];
 
             const csv = new CSVCreator({
