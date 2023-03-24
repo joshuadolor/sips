@@ -161,24 +161,22 @@ export default {
         saveReport() {
             const headers = [
                 "id",
-                "created_at",
+                "transaction_date",
                 "item_code",
                 "item_name",
                 "quantity",
                 "item_price",
                 "total_item_price",
-                "total_cost",
                 "agent",
             ];
             const displayHeaders = [
                 "Sales ID",
-                "Created At",
+                "Transaction Date",
                 "Item Code",
                 "Item Name",
                 "Quantity",
                 "Item Price",
                 "Total Item Price",
-                "Total Cost",
                 "Agent",
             ];
             const rawData = this.filteredItems.map((item) => {
@@ -196,7 +194,7 @@ export default {
             const modelValue = (d, pm) => {
                 return {
                     id: d.code,
-                    created_at: d.created_at,
+                    transaction_date: d.transaction_date,
                     item_code: pm.product.item_code,
                     item_name: pm.product.name,
                     quantity: pm.quantity,
