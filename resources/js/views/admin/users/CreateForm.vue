@@ -42,6 +42,12 @@
             "
         ></v-text-field>
 
+        <v-switch v-model="role" :value="1">
+            <template v-slot:label>
+                Role: {{ role == 1 ? "Admin" : "Normal User" }}
+            </template>
+        </v-switch>
+
         <CompanySelect prependIcon="mdi-domain" v-model="company" />
 
         <v-container class="mt-3">
@@ -70,6 +76,7 @@ const formData = {
     last_name: "",
     email: "",
     company_id: "",
+    role: 0,
 };
 import FormComponent from "~/mixins/form-component";
 import CompanySelect from "~/components/widgets/CompanySelect";
