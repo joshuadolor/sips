@@ -18,6 +18,7 @@
             </table>
 
             <div class="my-5 text-center">
+                <h3>{{ company }}</h3>
                 <div class="text-caption">
                     Payroll Period: {{ dateFrom }} - {{ dateUntil }}
                 </div>
@@ -131,6 +132,9 @@ export default {
             const creator = `${last_name}, ${first_name} ${middle_name} (${email})`;
 
             return `Created ${datetime} by ${creator}`;
+        },
+        company() {
+            return this.$store.state.session.info?.company?.name;
         },
     },
 };
